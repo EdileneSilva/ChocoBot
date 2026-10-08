@@ -4,6 +4,9 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from chatbot import handle_chat
+import time, uuid
+from fastapi import Request
+from observability import request_id, log_event
 import db
 import llm
 
@@ -45,3 +48,13 @@ def admin_data():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+@app.middleware("http")
+async def journaliser_requete(request: Request, call_next):
+    request_id.set(uuid.uuid4().hex[:8])
+    debut = time.perf_counter()
+    response = await call_next(request)
+    log_event("info", "http_request", method=request.method, path=request.url.path,
+              status=response.status_code, duration_ms=round((time.perf_counter() - debut) * 1000))
+    response.headers["X-Request-ID"] = request_id.get()
+    return response
