@@ -109,6 +109,55 @@ Panne simulée avec `FAIL_RATE=1` dans `.env` (100 % des appels au modèle écho
 - **La panne pollue les conversations.** Le message d'excuse est enregistré comme une vraie réponse de l'assistant (`chatbot.py:46`) : il sera renvoyé au modèle dans l'historique des messages suivants (problème F9).
 - **Les données personnelles s'affichent dans la console** à chaque message (`print` de `chatbot.py:36`), alors qu'aucune information utile sur l'erreur n'y figure.
 
+### Test 5a : catalogue corrompu (JSON invalide)
+
+Corruption provoquée avec `sed -i '2s/},$/}/' data/catalog.json` : suppression de la virgule après le Coffret Beffroi (C01), ce qui rend le fichier JSON invalide. Vérification avec `git diff data/catalog.json`, puis démarrage du serveur avec `uvicorn app:app`, sortie enregistrée dans `test5a_serveur.log`.
+
+| Question | Résultat AVANT |
+|---|---|
+| Le serveur démarre ? | **Non** : il s'arrête pendant le chargement de l'application |
+| Le service reste-t-il accessible ? | **Non** : `/health` injoignable, le chatbot est entièrement hors service |
+| Message d'erreur | Une trace technique de **75 lignes** ; la seule ligne utile est la dernière : `json.decoder.JSONDecodeError: Expecting ',' delimiter: line 3 column 3 (char 205)` |
+| Le message cite-t-il le fichier en cause ? | **Non** : il faut remonter dans la trace jusqu'à `chatbot.py, line 6` (`CATALOG = json.load(f)`) pour comprendre qu'il s'agit du catalogue |
+| Quelqu'un est alerté ? | **Non** |
+| Diagnostic possible ? | **Oui, mais seulement pour un développeur** qui lit la trace en entier ; la ligne indiquée (3) est celle qui suit l'erreur réelle (fin de la ligne 2) |
+
+**Ce que l'on observe :**
+
+- **Une seule virgule manquante suffit à rendre tout le chatbot indisponible.** Le catalogue est chargé une seule fois, au moment de l'import de `chatbot.py` (lignes 5-6), sans aucune vérification ni solution de repli (problème F6).
+- **L'erreur est technique et peu lisible.** Rien n'indique clairement « le fichier `data/catalog.json` est invalide » ; une personne de l'équipe qui met à jour les prix ne saurait pas quoi corriger.
+- **Aucune alerte** : si le serveur redémarre la nuit avec un catalogue abîmé, personne n'est prévenu avant les plaintes des clients.
+
+Catalogue restauré ensuite avec `git restore data/catalog.json`.
+
+### Test 5b : catalogue corrompu (allergène supprimé, JSON valide)
+
+Corruption provoquée avec `sed -i '2s/"lait", "fruits à coque"\]/"lait"]/' data/catalog.json` : « fruits à coque » est retiré des allergènes du Coffret Beffroi (C01), alors que son contenu indique toujours « praliné noisette ». Le fichier reste un JSON valide. Serveur redémarré (base vide), log dans `test5b_serveur.log`. La même question a été posée dans 3 sessions indépendantes (`test5b-1` à `test5b-3`) : « Je suis allergique aux fruits à coque, que me conseillez-vous autour de 25 euros ? ».
+
+| Question | Résultat AVANT |
+|---|---|
+| Le serveur démarre ? | **Oui**, normalement |
+| La modification est-elle détectée (log, `/health`, alerte) ? | **Non** : aucune erreur, réponses en 200 OK, aucune alerte |
+| Coffret Beffroi proposé à la personne allergique | **2 réponses sur 3** |
+| Autre coffret contenant des fruits à coque présenté comme sûr | **1 réponse sur 3** (Vegan Flandres) |
+| Réponses sans recommandation dangereuse | **1 sur 3** |
+
+**Détail des réponses :**
+
+- **Session 1 — dangereuse.** Le bot recommande le Coffret Beffroi en affirmant qu'il « n'est pas composé de fruits à coque », tout en citant le « praliné noisette » dans la même phrase : il reprend exactement l'information erronée du catalogue. Il présente aussi le Coffret Vegan Flandres (amande-coco) comme « sûr pour les personnes allergiques aux fruits à coque ».
+- **Session 2 — sans danger**, mais avec des informations inventées (composition en « tranches », « ganache de noisette sans noix », prix de 23,50 € et 24,50 €). La question a été envoyée deux fois dans cette session ; seule la première réponse est comptée.
+- **Session 3 — dangereuse.** Le bot propose le Grand Coffret Noël (en signalant les fruits à coque), puis recommande le Coffret Beffroi comme « une excellente option », avec ses « pralins de noisette ».
+
+Une quatrième question posée depuis le navigateur a donné une réponse sans coffret à risque, mais incohérente (la framboise et l'orange confite y sont présentées comme des « fruits à coque »).
+
+**Ce que l'on observe :**
+
+- **Une erreur dans le catalogue passe totalement inaperçue.** Le fichier est valide, le serveur démarre et rien ne contrôle la cohérence des données (par exemple, un contenu « praliné noisette » sans l'allergène « fruits à coque »). C'est la forme de corruption la plus dangereuse, car elle ne provoque aucune panne visible (problème F6).
+- **Le modèle propage l'erreur.** Dans la session 1, il affirme mot pour mot ce que dit le catalogue corrompu. La sécurité des personnes allergiques dépend donc à la fois de l'exactitude des données et du comportement du modèle, sans aucun garde-fou dans le code (problème C5).
+- **Limite :** le modèle proposait déjà parfois le Coffret Beffroi avec le catalogue correct (voir la partie 2). On ne peut donc pas attribuer toutes les erreurs à la corruption, mais la session 1 montre clairement l'effet de la donnée fausse.
+
+Catalogue restauré ensuite avec `git restore data/catalog.json`.
+
 ## 2. Qualité et sécurité des réponses (vérification à la main)
 
 Le script ne cherche que le nom d'un coffret à risque dans la réponse à la question sur l'allergie. Nous avons relu toutes les réponses aux deux questions concernées : la question sur l'allergie (Q2) et la question suivante sur les enfants (Q3), posée dans la même conversation, donc toujours pour un enfant allergique.
@@ -164,6 +213,8 @@ Le cas le plus fréquent est le coffret « Mendiants des Enfants », présenté 
 | Panne API : erreurs détectées et alertées | 0 % |
 | Panne API : `/health` détecte la panne ? | Non (200 « ok ») |
 | Panne API : erreur visible dans les logs ? | Non |
+| Catalogue invalide : le service démarre ? / message clair ? / alerte ? | Non / Non (trace de 75 lignes) / Non |
+| Allergène supprimé du catalogue : détecté ? / réponses dangereuses | Non / 2 sur 3 |
 | Énergie / message | 0,099 Wh |
 | CO₂e (15 messages) | 82,9 mg |
 | Longueur moyenne des réponses | 748 caractères |
