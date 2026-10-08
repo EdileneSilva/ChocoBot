@@ -9,7 +9,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from chatbot import clear_response_cache, handle_chat, purge_expired_cache  # importe llm.py avant sentry_sdk.init
+from chatbot import CATALOG_ERREURS, clear_response_cache, handle_chat, purge_expired_cache  # importe llm.py avant sentry_sdk.init
 from observability import request_id, log_event
 import db
 import llm
@@ -24,6 +24,10 @@ if SENTRY_DSN:  # sans DSN (ex. sur la machine de la binôme), Sentry reste dés
         include_local_variables=False,   # ne pas envoyer les variables (prompt, historique)
         traces_sample_rate=0,            # pas de suivi de performance : sobriété
     )
+
+if CATALOG_ERREURS:
+    # Signalé ici, après sentry_sdk.init, pour que l'erreur parte aussi vers Sentry
+    log_event("error", "catalog_invalid", erreurs=CATALOG_ERREURS)
 
 
 async def purge_expired_sessions_periodically():
@@ -98,7 +102,7 @@ def admin_data():
 
 @app.get("/health")
 def health():
-    """Vérifie réellement la base et le serveur de modèles ; répond 503 si l'un des deux ne fonctionne pas."""
+    """Vérifie réellement la base, le serveur de modèles et le catalogue ; répond 503 si l'un d'eux pose problème."""
     checks = {}
     try:
         db.conn.execute("SELECT 1").fetchone()
@@ -110,6 +114,7 @@ def health():
         checks["llm"] = "ok"
     except Exception as e:
         checks["llm"] = f"erreur : {type(e).__name__} ({e})"
+    checks["catalogue"] = "ok" if not CATALOG_ERREURS else f"erreur : {len(CATALOG_ERREURS)} problème(s), voir les logs"
     ok = all(etat == "ok" for etat in checks.values())
     if not ok:
         # warning et non error : /health peut être appelé souvent, on évite une alerte Sentry à chaque appel

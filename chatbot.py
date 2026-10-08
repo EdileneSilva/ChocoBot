@@ -2,10 +2,11 @@ import json, os, re, unicodedata
 import db
 import llm
 import time
+from pydantic import BaseModel, Field, ValidationError
 from observability import log_event
 
-with open(os.path.join(os.path.dirname(__file__), "data", "catalog.json"), encoding="utf-8") as f:
-    CATALOG = json.load(f)
+# Chemin modifiable par variable d'environnement (utile pour tester un catalogue corrompu sans toucher au vrai)
+CATALOG_PATH = os.getenv("CATALOG_PATH", os.path.join(os.path.dirname(__file__), "data", "catalog.json"))
 
 SYSTEM_PROMPT = """Tu es Clémence, assistant virtuel (IA), introduis-toi comme tel, conseillère à la Maison Delcourt, chocolatier artisanal à Lille.
 Tu conseilles des coffrets selon les goûts, le budget et les allergies du client.
@@ -99,6 +100,69 @@ def normalize_allergen(value):
     return "".join(char for char in normalized if unicodedata.category(char) != "Mn")
 
 
+class Coffret(BaseModel):
+    """Format attendu pour chaque coffret de data/catalog.json."""
+    id: str = Field(pattern=r"^C\d{2,}$")
+    nom: str = Field(min_length=1)
+    prix: float = Field(gt=0)
+    contenu: list[str] = Field(min_length=1)
+    allergenes: list[str]
+    tags: list[str] = []
+
+
+def valider_catalogue(donnees):
+    """Retourne la liste des problèmes du catalogue (liste vide si tout est correct)."""
+    if not isinstance(donnees, list) or not donnees:
+        return ["le catalogue doit être une liste non vide de coffrets"]
+    erreurs, ids = [], set()
+    for position, coffret in enumerate(donnees, 1):
+        nom = coffret.get("id", f"coffret n°{position}") if isinstance(coffret, dict) else f"coffret n°{position}"
+        try:
+            Coffret.model_validate(coffret)
+        except ValidationError as e:
+            erreurs += [f"{nom} : champ « {'.'.join(map(str, err['loc']))} » : {err['msg']}" for err in e.errors()]
+            continue
+        if coffret["id"] in ids:
+            erreurs.append(f"{nom} : identifiant en double")
+        ids.add(coffret["id"])
+        # Chaque allergène doit être connu
+        declares = set()
+        for allergene in coffret["allergenes"]:
+            normalise = normalize_allergen(allergene)
+            categorie = next((cat for cat, alias in ALLERGEN_ALIASES.items() if normalise in alias), None)
+            if categorie is None:
+                erreurs.append(f"{nom} : allergène inconnu « {allergene} »")
+            else:
+                declares.add(categorie)
+        # Cohérence : un ingrédient du contenu qui correspond à un allergène doit être déclaré
+        contenu = normalize_allergen(" ; ".join(coffret["contenu"]))
+        for categorie, alias in ALLERGEN_ALIASES.items():
+            trouve = next((a for a in alias if re.search(rf"(?<!\w){re.escape(a)}(?!\w)", contenu)), None)
+            if trouve and categorie not in declares:
+                erreurs.append(f"{nom} ({coffret['nom']}) : le contenu mentionne « {trouve} » "
+                               f"mais l'allergène « {categorie} » n'est pas déclaré")
+    return erreurs
+
+
+def charger_catalogue(chemin=CATALOG_PATH):
+    """Lit et valide le catalogue. Retourne (coffrets, erreurs) ; s'il y a une erreur, aucun coffret n'est utilisé."""
+    try:
+        with open(chemin, encoding="utf-8") as f:
+            donnees = json.load(f)
+    except FileNotFoundError:
+        return [], [f"fichier introuvable : {chemin}"]
+    except json.JSONDecodeError as e:
+        return [], [f"{os.path.basename(chemin)} : JSON invalide ligne {e.lineno}, colonne {e.colno} : {e.msg} "
+                    "(l'erreur peut se trouver à la fin de la ligne précédente)"]
+    erreurs = valider_catalogue(donnees)
+    return ([] if erreurs else donnees), erreurs
+
+
+CATALOG, CATALOG_ERREURS = charger_catalogue()
+CATALOG_INDISPONIBLE = ("Nos conseils personnalisés sont momentanément indisponibles. "
+                        "Vous pouvez consulter nos coffrets et leurs allergènes sur notre site.")
+
+
 def filter_catalog(allergies):
     if not allergies:
         return CATALOG
@@ -146,6 +210,11 @@ def handle_chat(session_id, message, allergies=None):
         log_event("info", "faq_hit", faq=faq["id"])
         db.save_message(session_id, "assistant", faq["reponse"])
         return {"reply": faq["reponse"]}
+
+    if CATALOG_ERREURS:
+        # Catalogue invalide : ne jamais conseiller à partir de données fausses (allergènes, prix)
+        log_event("warning", "catalog_unavailable")
+        return {"reply": CATALOG_INDISPONIBLE}   # jamais enregistrée dans l'historique
 
     allergies = allergies or []
     catalog = filter_catalog(allergies)
