@@ -5,7 +5,7 @@ from typing import Literal
 
 import sentry_sdk
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -98,7 +98,23 @@ def admin_data():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    """Vérifie réellement la base et le serveur de modèles ; répond 503 si l'un des deux ne fonctionne pas."""
+    checks = {}
+    try:
+        db.conn.execute("SELECT 1").fetchone()
+        checks["database"] = "ok"
+    except Exception as e:
+        checks["database"] = f"erreur : {type(e).__name__} ({e})"
+    try:
+        llm.check_models()
+        checks["llm"] = "ok"
+    except Exception as e:
+        checks["llm"] = f"erreur : {type(e).__name__} ({e})"
+    ok = all(etat == "ok" for etat in checks.values())
+    if not ok:
+        # warning et non error : /health peut être appelé souvent, on évite une alerte Sentry à chaque appel
+        log_event("warning", "health_check_failed", **checks)
+    return JSONResponse({"status": "ok" if ok else "degraded", "checks": checks}, status_code=200 if ok else 503)
 
 
 @app.middleware("http")

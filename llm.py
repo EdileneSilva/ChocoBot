@@ -18,6 +18,14 @@ from openai import OpenAI
 _client = OpenAI(base_url=BASE_URL, api_key=API_KEY, timeout=30, max_retries=0)
 
 
+def check_models(timeout=3):
+    """Vérifie que le serveur de modèles répond et que les deux modèles sont installés ; lève une exception sinon."""
+    disponibles = {m.id for m in _client.with_options(timeout=timeout).models.list()}
+    manquants = [m for m in (BIG_MODEL, SMALL_MODEL) if m not in disponibles]
+    if manquants:
+        raise RuntimeError(f"modèle(s) absent(s) : {', '.join(manquants)}")
+
+
 def chat(model, messages, max_tokens=1500):
     """Retourne (texte, usage). Peut lever une exception (Ollama arrêté, modèle absent, panne simulée)."""
     # Simulation d'incidents (optionnelle, voir .env.example)
