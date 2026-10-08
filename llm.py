@@ -22,7 +22,7 @@ def chat(model, messages, max_tokens=1500):
 
     from openai import OpenAI
     client = OpenAI(base_url=BASE_URL, api_key=API_KEY, timeout=180)
-    r = client.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens, temperature=0.7)
+    r = client.chat.completions.create(model=model, messages=messages, max_tokens=max_tokens, temperature=0.3)
     u = r.usage
     return r.choices[0].message.content, {"model": model,
                                           "prompt_tokens": getattr(u, "prompt_tokens", 0) if u else 0,
