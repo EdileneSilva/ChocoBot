@@ -64,8 +64,9 @@ Arrêter le serveur : Ctrl+C. Ollama doit rester lancé en arrière-plan.
 - **Le back-office de la Maison Delcourt** (clients et conversations) : http://localhost:8000/admin
 - **La documentation de l'API** : http://localhost:8000/docs
 - **La base de données** : le fichier `chocobot.db`, créé au premier message, dans le dossier où vous lancez `uvicorn`.
-  Ouvrez-le avec [DB Browser for SQLite](https://sqlitebrowser.org/) (ou `sqlite3 chocobot.db`). Tables : `customers`, `messages`.
+  Ouvrez-le avec [DB Browser for SQLite](https://sqlitebrowser.org/) (ou `sqlite3 chocobot.db`). Table : `messages`.
   Pour repartir de zéro, arrêtez le serveur et supprimez ce fichier.
+- **Effacer une conversation** : le bouton « Effacer mes données » supprime les messages de la session en cours ; l'API correspondante est `DELETE /session?session_id=...`.
 
 ## Mesurer
 
