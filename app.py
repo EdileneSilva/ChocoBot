@@ -4,12 +4,12 @@ from contextlib import asynccontextmanager
 from typing import Literal
 
 import sentry_sdk
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from chatbot import handle_chat  # importe llm.py, qui charge le .env : à garder avant sentry_sdk.init
+from chatbot import clear_response_cache, handle_chat, purge_expired_cache  # importe llm.py avant sentry_sdk.init
 from observability import request_id, log_event
 import db
 import llm
@@ -29,6 +29,7 @@ if SENTRY_DSN:  # sans DSN (ex. sur la machine de la binôme), Sentry reste dés
 async def purge_expired_sessions_periodically():
     while True:
         db.purge_expired_sessions()
+        purge_expired_cache()
         await asyncio.sleep(60)
 
 
@@ -53,6 +54,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 class ChatIn(BaseModel):
     session_id: str
     message: str
+    privacy_consent: bool
     allergies: list[Literal["lait", "fruits à coque", "soja", "gluten", "œufs", "arachides"]] = Field(
         default_factory=list
     )
@@ -63,14 +65,22 @@ def home():
     return FileResponse("static/index.html")
 
 
+@app.get("/confidentialite")
+def privacy():
+    return FileResponse("static/privacy.html")
+
+
 @app.post("/chat")
 def chat(body: ChatIn):
+    if not body.privacy_consent:
+        raise HTTPException(status_code=403, detail="L'acceptation de la notice de confidentialité est requise.")
     return handle_chat(body.session_id, body.message, body.allergies)
 
 
 @app.delete("/session", status_code=204)
 def delete_session(session_id: str):
     db.delete_session(session_id)
+    clear_response_cache()
 
 
 # Back-office de l'équipe Delcourt : pratique pour voir qui a écrit quoi
