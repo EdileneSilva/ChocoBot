@@ -70,6 +70,30 @@ def choose_model(message):
     return llm.BIG_MODEL
 
 
+FALLBACK_REPLY = ("Désolé, je ne peux pas répondre pour le moment. "
+                  "Vous pouvez réessayer dans quelques instants ou consulter nos coffrets sur notre site.")
+
+
+def call_model(model, messages):
+    """Essaie le modèle choisi, puis le petit modèle en secours. Lève la dernière erreur si tout échoue."""
+    tentatives = [model, llm.SMALL_MODEL]
+    for numero, modele in enumerate(tentatives, 1):
+        debut = time.perf_counter()
+        try:
+            reply, usage = llm.chat(modele, messages, max_tokens=MAX_TOKENS)
+            log_event("info", "llm_call", model=usage["model"], attempt=numero,
+                      prompt_tokens=usage["prompt_tokens"], completion_tokens=usage["completion_tokens"],
+                      latency_ms=round((time.perf_counter() - debut) * 1000), status="ok")
+            return reply
+        except Exception as e:
+            derniere = numero == len(tentatives)
+            log_event("error" if derniere else "warning", "llm_call_failed", exc_info=derniere,
+                      model=modele, attempt=numero, error=type(e).__name__, detail=str(e),
+                      latency_ms=round((time.perf_counter() - debut) * 1000))
+            if derniere:
+                raise
+
+
 def normalize_allergen(value):
     normalized = unicodedata.normalize("NFD", value.casefold().replace("œ", "oe").replace("æ", "ae"))
     return "".join(char for char in normalized if unicodedata.category(char) != "Mn")
@@ -128,7 +152,7 @@ def handle_chat(session_id, message, allergies=None):
     system = SYSTEM_PROMPT + "\n\nCatalogue des coffrets compatibles avec les allergies indiquées :\n" + format_catalog(catalog)
     history = db.get_history(session_id)
     cache_key = None
-    
+
     if len(history) == 1:   # premier message de la conversation
         cache_key = (" ".join(re.findall(r"\w+", normalize_allergen(message))), tuple(sorted(allergies)))
         if cache_key in _cache:
@@ -139,20 +163,13 @@ def handle_chat(session_id, message, allergies=None):
     messages = [{"role": "system", "content": system}] + history[-HISTORY_MAX:]
 
     model = choose_model(message)
-    debut = time.perf_counter()
     try:
-        reply, usage = llm.chat(model, messages, max_tokens=MAX_TOKENS)
-        log_event("info", "llm_call", model=usage["model"], prompt_tokens=usage["prompt_tokens"],
-                completion_tokens=usage["completion_tokens"],
-                latency_ms=round((time.perf_counter() - debut) * 1000), status="ok")
-        if cache_key:
-            if len(_cache) >= CACHE_MAX:
-                _cache.pop(next(iter(_cache)))   # retire la plus ancienne entrée
-            _cache[cache_key] = (time.time(), reply)
-    except Exception as e:
-        log_event("error", "llm_call_failed", exc_info=True, model=model,
-                error=type(e).__name__, detail=str(e),
-                latency_ms=round((time.perf_counter() - debut) * 1000))
-        reply = "Désolé, une erreur est survenue. Réessayez plus tard."
+        reply = call_model(model, messages)
+    except Exception:
+        return {"reply": FALLBACK_REPLY}   # réponse de secours, jamais enregistrée dans l'historique
+    if cache_key:
+        if len(_cache) >= CACHE_MAX:
+            _cache.pop(next(iter(_cache)))   # retire la plus ancienne entrée
+        _cache[cache_key] = (time.time(), reply)
     db.save_message(session_id, "assistant", reply)
     return {"reply": reply}
