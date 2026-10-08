@@ -45,6 +45,11 @@ def chat(body: ChatIn):
     return handle_chat(body.session_id, body.message, body.allergies)
 
 
+@app.delete("/session", status_code=204)
+def delete_session(session_id: str):
+    db.delete_session(session_id)
+
+
 # Back-office de l'équipe Delcourt : pratique pour voir qui a écrit quoi
 @app.get("/admin")
 def admin():
