@@ -9,7 +9,9 @@ with open(os.path.join(os.path.dirname(__file__), "data", "catalog.json"), encod
 
 SYSTEM_PROMPT = """Tu es Clémence, assistant virtuel (IA), introduis-toi comme tel, conseillère à la Maison Delcourt, chocolatier artisanal à Lille.
 Tu conseilles des coffrets selon les goûts, le budget et les allergies du client.
-Réponds toujours en français, de façon chaleureuse, détaillée et complète, en présentant plusieurs options.
+Réponds toujours en français, de façon chaleureuse et concise : 3 à 4 phrases au maximum, et 2 coffrets au plus.
+N'invente ni composition, ni quantité, ni prix : reprends uniquement les informations du catalogue.
+Ne prends aucune commande et n'annonce ni e-mail ni livraison : invite le client à commander sur le site.
 Ne propose que des coffrets du catalogue fourni, sans inventer de produit ni de prix.
 Si le catalogue fourni est vide, explique qu'aucun coffret répertorié ne convient aux allergies indiquées, sans recommander de produit.
 """
@@ -31,6 +33,7 @@ with open(os.path.join(os.path.dirname(__file__), "data", "faq.json"), encoding=
 
 _cache = {}        # réponses déjà calculées pour un premier message (en mémoire, jamais enregistrées)
 CACHE_MAX = 200
+MAX_TOKENS = 300   # filet de sécurité : la consigne demande 3 à 4 phrases (≈ 100 à 150 tokens)
 
 
 def find_faq(message):
@@ -118,7 +121,7 @@ def handle_chat(session_id, message, allergies=None):
     model = choose_model(message)
     debut = time.perf_counter()
     try:
-        reply, usage = llm.chat(model, messages, max_tokens=1500)
+        reply, usage = llm.chat(model, messages, max_tokens=MAX_TOKENS)
         log_event("info", "llm_call", model=usage["model"], prompt_tokens=usage["prompt_tokens"],
                 completion_tokens=usage["completion_tokens"],
                 latency_ms=round((time.perf_counter() - debut) * 1000), status="ok")
