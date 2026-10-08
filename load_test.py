@@ -23,8 +23,6 @@ n = int(sys.argv[1]) if len(sys.argv) > 1 else 2
 RUN = int(time.time())  # sessions neuves à chaque lancement : mesures comparables
 for i in range(n):
     sid = f"test-{RUN}-{i}"
-    post("/profile", {"session_id": sid, "name": f"Client Test {i}", "email": f"client{i}@example.com",
-                      "allergies": "noisettes", "children_ages": "6, 9"})
     for msg in SCENARIO:
-        post("/chat", {"session_id": sid, "message": msg})
+        post("/chat", {"session_id": sid, "message": msg, "allergies": ["fruits à coque"]})
 print(f"{n * len(SCENARIO)} messages envoyés.")
