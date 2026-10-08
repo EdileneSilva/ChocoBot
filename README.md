@@ -67,6 +67,7 @@ Arrêter le serveur : Ctrl+C. Ollama doit rester lancé en arrière-plan.
   Ouvrez-le avec [DB Browser for SQLite](https://sqlitebrowser.org/) (ou `sqlite3 chocobot.db`). Table : `messages`.
   Pour repartir de zéro, arrêtez le serveur et supprimez ce fichier.
 - **Effacer une conversation** : le bouton « Effacer mes données » supprime les messages de la session en cours ; l'API correspondante est `DELETE /session?session_id=...`.
+- **Purge automatique** : les messages d'une session sont supprimés après 3 heures sans activité. Le nettoyage s'exécute au démarrage puis toutes les minutes ; un message reçu après expiration démarre un historique neuf.
 
 ## Mesurer
 
