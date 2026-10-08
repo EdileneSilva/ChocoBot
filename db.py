@@ -19,6 +19,11 @@ def get_history(session_id):
     return [{"role": r, "content": c} for r, c in rows]
 
 
+def delete_session(session_id):
+    conn.execute("DELETE FROM messages WHERE session_id=?", (session_id,))
+    conn.commit()
+
+
 def get_all():
     msgs = conn.execute("SELECT id, session_id, role, content, created_at FROM messages ORDER BY id DESC LIMIT 200").fetchall()
     return {

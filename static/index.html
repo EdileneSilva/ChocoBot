@@ -12,8 +12,9 @@ body{margin:0;min-height:100vh;background:var(--creme);color:var(--cacao);font-f
 header{background:var(--cacao);color:var(--creme);padding:22px 28px;border-bottom:4px solid var(--or);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
 header h1{margin:0;font-size:1.7rem;letter-spacing:.04em;font-weight:700}
 header span{font-style:italic;color:#d9bf8c;font-size:.95rem}
-.ghost{margin-left:auto;background:transparent;border:1px solid var(--or);color:var(--creme);padding:7px 14px;border-radius:99px;font:inherit;font-size:.85rem;cursor:pointer}
+.ghost{background:transparent;border:1px solid var(--or);color:var(--creme);padding:7px 14px;border-radius:99px;font:inherit;font-size:.85rem;cursor:pointer}
 .ghost:hover{background:var(--or);color:var(--cacao)}
+header .ghost:first-of-type{margin-left:auto}
 main{max-width:1000px;margin:26px auto;padding:0 16px;display:grid;grid-template-columns:1fr 280px;gap:22px}
 @media(max-width:820px){main{grid-template-columns:1fr}}
 .box{background:var(--papier);border:1px solid var(--ligne);border-radius:6px;box-shadow:0 6px 22px rgba(43,24,16,.12)}
@@ -45,7 +46,7 @@ aside input[type="checkbox"]{width:16px;height:16px;margin:0;accent-color:var(--
 </style>
 </head>
 <body>
-<header><h1>MAISON DELCOURT</h1><span>Chocolatier artisanal · Lille</span><button id="reset" class="ghost">Nouvelle conversation</button></header>
+<header><h1>MAISON DELCOURT</h1><span>Chocolatier artisanal · Lille</span><button id="reset" class="ghost">Nouvelle conversation</button><button id="erase" class="ghost">Effacer mes données</button></header>
 <main>
  <section id="chat" class="box">
   <div id="log"></div>
@@ -93,6 +94,10 @@ async function post(path, payload){
   if (!r.ok) throw new Error("HTTP " + r.status);
   return r.json();
 }
+async function eraseSession(sessionId){
+  const response = await fetch("/session?session_id=" + encodeURIComponent(sessionId), {method: "DELETE"});
+  if (!response.ok) throw new Error("HTTP " + response.status);
+}
 async function send(text){
   if (busy) return;
   busy = true; el("go").disabled = true;
@@ -121,6 +126,22 @@ el("reset").onclick = () => {
   log.innerHTML = "";
   document.querySelectorAll('input[name="allergies"]').forEach(input => { input.checked = false; });
   welcome();
+};
+el("erase").onclick = async () => {
+  if (busy || !confirm("Effacer définitivement les messages de cette conversation ?")) return;
+  const button = el("erase");
+  button.disabled = true;
+  try {
+    await eraseSession(sid);
+    sid = localStorage.sid = crypto.randomUUID();
+    log.innerHTML = "";
+    document.querySelectorAll('input[name="allergies"]').forEach(input => { input.checked = false; });
+    welcome();
+  } catch {
+    alert("Impossible d'effacer vos données. Veuillez réessayer.");
+  } finally {
+    button.disabled = false;
+  }
 };
 welcome();
 </script>
