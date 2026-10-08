@@ -33,6 +33,17 @@ _cache = {}        # réponses déjà calculées pour un premier message (en mé
 CACHE_MAX = 200
 
 
+def clear_response_cache():
+    _cache.clear()
+
+
+def purge_expired_cache(now=None):
+    cutoff = (time.time() if now is None else now) - db.SESSION_RETENTION_SECONDS
+    expired = [key for key, (created_at, _) in _cache.items() if created_at <= cutoff]
+    for key in expired:
+        del _cache[key]
+
+
 def find_faq(message):
     """Réponse fixe pour une question courte sur un sujet connu, sinon None."""
     words = re.findall(r"\w+", normalize_allergen(message))
@@ -90,6 +101,7 @@ def filter_catalog(allergies):
 
 
 def handle_chat(session_id, message, allergies=None):
+    purge_expired_cache()
     db.save_message(session_id, "user", message)
     log_event("info", "chat_message", session=session_id[:8], message_length=len(message))
 
@@ -110,7 +122,7 @@ def handle_chat(session_id, message, allergies=None):
         cache_key = (" ".join(re.findall(r"\w+", normalize_allergen(message))), tuple(sorted(allergies)))
         if cache_key in _cache:
             log_event("info", "cache_hit")
-            reply = _cache[cache_key]
+            reply = _cache[cache_key][1]
             db.save_message(session_id, "assistant", reply)
             return {"reply": reply}
     messages = [{"role": "system", "content": system}] + history
@@ -125,7 +137,7 @@ def handle_chat(session_id, message, allergies=None):
         if cache_key:
             if len(_cache) >= CACHE_MAX:
                 _cache.pop(next(iter(_cache)))   # retire la plus ancienne entrée
-            _cache[cache_key] = reply
+            _cache[cache_key] = (time.time(), reply)
     except Exception as e:
         log_event("error", "llm_call_failed", exc_info=True, model=model,
                 error=type(e).__name__, detail=str(e),

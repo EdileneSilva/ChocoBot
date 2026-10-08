@@ -24,5 +24,6 @@ RUN = int(time.time())  # sessions neuves à chaque lancement : mesures comparab
 for i in range(n):
     sid = f"test-{RUN}-{i}"
     for msg in SCENARIO:
-        post("/chat", {"session_id": sid, "message": msg, "allergies": ["fruits à coque"]})
+        post("/chat", {"session_id": sid, "message": msg, "allergies": ["fruits à coque"],
+                       "privacy_consent": True})
 print(f"{n * len(SCENARIO)} messages envoyés.")

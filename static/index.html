@@ -43,34 +43,58 @@ fieldset{border:0;padding:0;margin:0}
 fieldset legend{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cacao2)}
 aside label.allergen{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:normal;font-size:.92rem;margin:9px 0}
 aside input[type="checkbox"]{width:16px;height:16px;margin:0;accent-color:var(--framboise)}
+.privacy-consent{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:.83rem;line-height:1.4}
+.privacy-consent input{flex:0 0 auto;margin-top:3px}
+.privacy-link{color:var(--cacao2)}
+#ai-warning{margin:12px 20px 0;padding:10px 12px;border-left:4px solid var(--or);background:#fff7e6;font: .85rem/1.4 system-ui,sans-serif}
+#consent-gate{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:rgba(30,18,12,.78);font-family:system-ui,sans-serif}
+#consent-gate[hidden]{display:none}
+#consent-panel{width:min(520px,100%);padding:24px;background:var(--papier);border:1px solid var(--ligne);border-radius:8px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+#consent-panel h2{margin:0 0 10px;font:700 1.35rem Georgia,"Times New Roman",serif}
+#consent-panel p{line-height:1.5}
+#consent-panel label{display:flex;align-items:flex-start;gap:10px;margin:18px 0}
+#consent-panel input{margin-top:5px}
+#accept-privacy{width:100%;padding:12px}
 </style>
 </head>
 <body>
+<div id="consent-gate" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+ <section id="consent-panel">
+  <h2 id="consent-title">Avant d’utiliser le chatbot</h2>
+  <p>Pour vous répondre, ChocoBot traite vos messages et conserve l’historique jusqu’à sa purge après trois heures d’inactivité. Consultez la <a href="/confidentialite">notice de confidentialité</a> pour connaître les détails.</p>
+  <label><input id="privacy-consent" type="checkbox">
+   <span>J’ai lu la notice et j’accepte le traitement de mes messages et, si je les sélectionne, de mes filtres allergènes pour utiliser le chatbot.</span>
+  </label>
+  <button id="accept-privacy" class="go" type="button" disabled>Accepter et continuer</button>
+ </section>
+</div>
 <header><h1>MAISON DELCOURT</h1><span>Chocolatier artisanal · Lille</span><button id="reset" class="ghost">Nouvelle conversation</button><button id="erase" class="ghost">Effacer mes données</button></header>
 <main>
  <section id="chat" class="box">
+  <p id="ai-warning"><strong>À savoir :</strong> les réponses de l’assistant IA peuvent être erronées ou incomplètes. Vérifiez les informations importantes, notamment les allergènes et la composition des produits, auprès de la Maison Delcourt.</p>
   <div id="log"></div>
   <div id="chips">
-   <button class="chip">Un coffret à 30 euros</button>
-   <button class="chip">Un cadeau pour des enfants</button>
-   <button class="chip">Du chocolat noir intense</button>
-   <button class="chip">Quels sont vos horaires ?</button>
-   <button class="chip">Livraison ?</button>
+   <button class="chip" disabled>Un coffret à 30 euros</button>
+   <button class="chip" disabled>Un cadeau pour des enfants</button>
+   <button class="chip" disabled>Du chocolat noir intense</button>
+   <button class="chip" disabled>Quels sont vos horaires ?</button>
+   <button class="chip" disabled>Livraison ?</button>
   </div>
-  <form id="send"><input id="msg" autocomplete="off" placeholder="Écrivez votre message…" required><button class="go" id="go">Envoyer</button></form>
+  <form id="send"><input id="msg" autocomplete="off" placeholder="Écrivez votre message…" required disabled><button class="go" id="go" disabled>Envoyer</button></form>
  </section>
  <aside class="box">
   <h2>Pour mieux vous conseiller</h2>
-  <p>Les allergènes cochés servent uniquement à filtrer les coffrets proposés. Ils ne sont pas enregistrés.</p>
+  <p>Les allergènes cochés servent à filtrer les coffrets. Ils ne sont pas ajoutés à l’historique des messages et le cache temporaire expire après 3 h.</p>
   <fieldset>
    <legend>Allergènes à éviter</legend>
-   <label class="allergen"><input type="checkbox" name="allergies" value="lait"> Lait</label>
-   <label class="allergen"><input type="checkbox" name="allergies" value="fruits à coque"> Fruits à coque</label>
-   <label class="allergen"><input type="checkbox" name="allergies" value="soja"> Soja</label>
-   <label class="allergen"><input type="checkbox" name="allergies" value="gluten"> Gluten</label>
-   <label class="allergen"><input type="checkbox" name="allergies" value="œufs"> Œufs</label>
-   <label class="allergen"><input type="checkbox" name="allergies" value="arachides"> Arachides</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="lait" disabled> Lait</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="fruits à coque" disabled> Fruits à coque</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="soja" disabled> Soja</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="gluten" disabled> Gluten</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="œufs" disabled> Œufs</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="arachides" disabled> Arachides</label>
   </fieldset>
+  <p><a class="privacy-link" href="/confidentialite">Confidentialité et données personnelles (RGPD)</a></p>
  </aside>
 </main>
 <script>
@@ -78,7 +102,13 @@ const log = document.getElementById("log");
 const el = id => document.getElementById(id);
 let sid = localStorage.sid || (localStorage.sid = crypto.randomUUID());
 let busy = false;
+let privacyConsent = false;
 const selectedAllergies = () => [...document.querySelectorAll('input[name="allergies"]:checked')].map(input => input.value);
+
+function setChatEnabled(enabled){
+  document.querySelectorAll("#msg, #go, .chip, input[name='allergies']")
+    .forEach(control => { control.disabled = !enabled; });
+}
 
 function add(text, who){
   const d = document.createElement("div"); d.className = "msg " + who;
@@ -99,14 +129,15 @@ async function eraseSession(sessionId){
   if (!response.ok) throw new Error("HTTP " + response.status);
 }
 async function send(text){
-  if (busy) return;
+  if (busy || !privacyConsent) return;
+  const allergies = selectedAllergies();
   busy = true; el("go").disabled = true;
   add(text, "me");
   const wait = add("", "bot");
   wait.lastChild.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
   try {
     wait.lastChild.textContent = (await post("/chat", {
-      session_id: sid, message: text, allergies: selectedAllergies()
+      session_id: sid, message: text, allergies, privacy_consent: privacyConsent
     })).reply;
   } catch (e) {
     wait.lastChild.textContent = "Désolé, une erreur est survenue.";
@@ -120,6 +151,16 @@ el("send").onsubmit = e => {
   if (i.value.trim()) { send(i.value.trim()); i.value = ""; }
 };
 document.querySelectorAll(".chip").forEach(c => c.onclick = () => send(c.textContent));
+el("privacy-consent").addEventListener("change", () => {
+  el("accept-privacy").disabled = !el("privacy-consent").checked;
+});
+el("accept-privacy").onclick = () => {
+  if (!el("privacy-consent").checked) return;
+  privacyConsent = true;
+  setChatEnabled(true);
+  el("consent-gate").hidden = true;
+  el("msg").focus();
+};
 
 el("reset").onclick = () => {
   sid = localStorage.sid = crypto.randomUUID();

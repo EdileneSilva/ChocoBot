@@ -1,6 +1,6 @@
 import sqlite3, time
 
-SESSION_RETENTION_SECONDS = 3 * 60
+SESSION_RETENTION_SECONDS = 3 * 60 * 60
 
 conn = sqlite3.connect("chocobot.db", check_same_thread=False)
 # Remove profiles saved by earlier versions; profile data is no longer collected or retained.
