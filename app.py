@@ -1,4 +1,6 @@
+import asyncio
 import os, time, uuid
+from contextlib import asynccontextmanager
 from typing import Literal
 
 import sentry_sdk
@@ -23,7 +25,28 @@ if SENTRY_DSN:  # sans DSN (ex. sur la machine de la binôme), Sentry reste dés
         traces_sample_rate=0,            # pas de suivi de performance : sobriété
     )
 
-app = FastAPI(title="ChocoBot - Maison Delcourt")
+
+async def purge_expired_sessions_periodically():
+    while True:
+        db.purge_expired_sessions()
+        await asyncio.sleep(60)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    purge_task = asyncio.create_task(purge_expired_sessions_periodically())
+    app.state.purge_task = purge_task
+    try:
+        yield
+    finally:
+        app.state.purge_task.cancel()
+        try:
+            await app.state.purge_task
+        except asyncio.CancelledError:
+            pass
+
+
+app = FastAPI(title="ChocoBot - Maison Delcourt", lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
