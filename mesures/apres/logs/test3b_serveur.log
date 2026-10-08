@@ -1,0 +1,110 @@
+INFO:     Started server process [1061050]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)
+{"ts": "2026-10-08T16:13:24", "level": "INFO", "event": "http_request", "request_id": "c5f40b32", "method": "GET", "path": "/", "status": 200, "duration_ms": 8}
+INFO:     127.0.0.1:53174 - "GET / HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:24", "level": "INFO", "event": "chat_message", "request_id": "8bf12327", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:24", "level": "INFO", "event": "faq_hit", "request_id": "8bf12327", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:24", "level": "INFO", "event": "http_request", "request_id": "8bf12327", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 3}
+INFO:     127.0.0.1:53186 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:24", "level": "INFO", "event": "chat_message", "request_id": "6f8da3f0", "session": "test-179", "message_length": 75}
+{"ts": "2026-10-08T16:13:25", "level": "INFO", "event": "chat_message", "request_id": "841e1750", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:25", "level": "INFO", "event": "faq_hit", "request_id": "841e1750", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:25", "level": "INFO", "event": "http_request", "request_id": "841e1750", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:53196 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:25", "level": "INFO", "event": "chat_message", "request_id": "fb90c8e4", "session": "test-179", "message_length": 75}
+{"ts": "2026-10-08T16:13:26", "level": "INFO", "event": "chat_message", "request_id": "bd2434c5", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:26", "level": "INFO", "event": "faq_hit", "request_id": "bd2434c5", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:26", "level": "INFO", "event": "http_request", "request_id": "bd2434c5", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:53226 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:26", "level": "INFO", "event": "chat_message", "request_id": "4da1397c", "session": "test-179", "message_length": 75}
+{"ts": "2026-10-08T16:13:27", "level": "INFO", "event": "chat_message", "request_id": "e5861304", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:27", "level": "INFO", "event": "faq_hit", "request_id": "e5861304", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:27", "level": "INFO", "event": "http_request", "request_id": "e5861304", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 2}
+INFO:     127.0.0.1:53238 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:27", "level": "INFO", "event": "chat_message", "request_id": "c9a17a61", "session": "test-179", "message_length": 75}
+{"ts": "2026-10-08T16:13:28", "level": "INFO", "event": "chat_message", "request_id": "7afef5bd", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:28", "level": "INFO", "event": "faq_hit", "request_id": "7afef5bd", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:28", "level": "INFO", "event": "http_request", "request_id": "7afef5bd", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:50384 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:28", "level": "INFO", "event": "chat_message", "request_id": "ccab2d1d", "session": "test-179", "message_length": 75}
+{"ts": "2026-10-08T16:13:31", "level": "INFO", "event": "llm_call", "request_id": "6f8da3f0", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 428, "completion_tokens": 59, "latency_ms": 6547, "status": "ok"}
+{"ts": "2026-10-08T16:13:31", "level": "INFO", "event": "http_request", "request_id": "6f8da3f0", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 6548}
+INFO:     127.0.0.1:53190 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:31", "level": "INFO", "event": "chat_message", "request_id": "9356573e", "session": "test-179", "message_length": 37}
+{"ts": "2026-10-08T16:13:32", "level": "INFO", "event": "llm_call", "request_id": "4da1397c", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 428, "completion_tokens": 53, "latency_ms": 5642, "status": "ok"}
+{"ts": "2026-10-08T16:13:32", "level": "INFO", "event": "http_request", "request_id": "4da1397c", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 5643}
+INFO:     127.0.0.1:53234 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:32", "level": "INFO", "event": "chat_message", "request_id": "f6d6928b", "session": "test-179", "message_length": 37}
+{"ts": "2026-10-08T16:13:34", "level": "INFO", "event": "llm_call", "request_id": "fb90c8e4", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 428, "completion_tokens": 70, "latency_ms": 9100, "status": "ok"}
+{"ts": "2026-10-08T16:13:34", "level": "INFO", "event": "http_request", "request_id": "fb90c8e4", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 9101}
+INFO:     127.0.0.1:53210 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:34", "level": "INFO", "event": "chat_message", "request_id": "663f2877", "session": "test-179", "message_length": 37}
+{"ts": "2026-10-08T16:13:35", "level": "INFO", "event": "llm_call", "request_id": "c9a17a61", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 428, "completion_tokens": 45, "latency_ms": 8000, "status": "ok"}
+{"ts": "2026-10-08T16:13:35", "level": "INFO", "event": "http_request", "request_id": "c9a17a61", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 8002}
+INFO:     127.0.0.1:53240 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:35", "level": "INFO", "event": "chat_message", "request_id": "bd8b5ee9", "session": "test-179", "message_length": 37}
+{"ts": "2026-10-08T16:13:37", "level": "INFO", "event": "llm_call", "request_id": "ccab2d1d", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 428, "completion_tokens": 65, "latency_ms": 9377, "status": "ok"}
+{"ts": "2026-10-08T16:13:37", "level": "INFO", "event": "http_request", "request_id": "ccab2d1d", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 9378}
+INFO:     127.0.0.1:50386 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:37", "level": "INFO", "event": "chat_message", "request_id": "a425b9ab", "session": "test-179", "message_length": 37}
+{"ts": "2026-10-08T16:13:39", "level": "INFO", "event": "llm_call", "request_id": "9356573e", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 505, "completion_tokens": 61, "latency_ms": 8405, "status": "ok"}
+{"ts": "2026-10-08T16:13:39", "level": "INFO", "event": "http_request", "request_id": "9356573e", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 8406}
+INFO:     127.0.0.1:50394 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:39", "level": "INFO", "event": "chat_message", "request_id": "a56766a5", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:39", "level": "INFO", "event": "faq_hit", "request_id": "a56766a5", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:39", "level": "INFO", "event": "http_request", "request_id": "a56766a5", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:48398 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:39", "level": "INFO", "event": "chat_message", "request_id": "5b6ee03d", "session": "test-179", "message_length": 39}
+{"ts": "2026-10-08T16:13:41", "level": "INFO", "event": "llm_call", "request_id": "f6d6928b", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 499, "completion_tokens": 58, "latency_ms": 8857, "status": "ok"}
+{"ts": "2026-10-08T16:13:41", "level": "INFO", "event": "http_request", "request_id": "f6d6928b", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 8858}
+INFO:     127.0.0.1:50402 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:41", "level": "INFO", "event": "chat_message", "request_id": "dc7236c3", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:41", "level": "INFO", "event": "faq_hit", "request_id": "dc7236c3", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:41", "level": "INFO", "event": "http_request", "request_id": "dc7236c3", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:48412 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:41", "level": "INFO", "event": "chat_message", "request_id": "4eb982f8", "session": "test-179", "message_length": 39}
+{"ts": "2026-10-08T16:13:43", "level": "INFO", "event": "llm_call", "request_id": "663f2877", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 516, "completion_tokens": 80, "latency_ms": 9346, "status": "ok"}
+{"ts": "2026-10-08T16:13:43", "level": "INFO", "event": "http_request", "request_id": "663f2877", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 9348}
+INFO:     127.0.0.1:50410 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:43", "level": "INFO", "event": "chat_message", "request_id": "e9f482e3", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:43", "level": "INFO", "event": "faq_hit", "request_id": "e9f482e3", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:43", "level": "INFO", "event": "http_request", "request_id": "e9f482e3", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:48432 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:44", "level": "INFO", "event": "chat_message", "request_id": "8b55a141", "session": "test-179", "message_length": 39}
+{"ts": "2026-10-08T16:13:45", "level": "INFO", "event": "llm_call", "request_id": "bd8b5ee9", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 491, "completion_tokens": 44, "latency_ms": 9583, "status": "ok"}
+{"ts": "2026-10-08T16:13:45", "level": "INFO", "event": "http_request", "request_id": "bd8b5ee9", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 9584}
+INFO:     127.0.0.1:50420 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:45", "level": "INFO", "event": "chat_message", "request_id": "cec7241f", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:45", "level": "INFO", "event": "faq_hit", "request_id": "cec7241f", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:45", "level": "INFO", "event": "http_request", "request_id": "cec7241f", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:48452 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:45", "level": "INFO", "event": "chat_message", "request_id": "f486e0a4", "session": "test-179", "message_length": 39}
+{"ts": "2026-10-08T16:13:47", "level": "INFO", "event": "llm_call", "request_id": "a425b9ab", "model": "llama3.2:3b", "attempt": 1, "prompt_tokens": 511, "completion_tokens": 79, "latency_ms": 9212, "status": "ok"}
+{"ts": "2026-10-08T16:13:47", "level": "INFO", "event": "http_request", "request_id": "a425b9ab", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 9213}
+INFO:     127.0.0.1:50422 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:47", "level": "INFO", "event": "chat_message", "request_id": "4f8d70cc", "session": "test-179", "message_length": 25}
+{"ts": "2026-10-08T16:13:47", "level": "INFO", "event": "faq_hit", "request_id": "4f8d70cc", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:47", "level": "INFO", "event": "http_request", "request_id": "4f8d70cc", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:48476 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:47", "level": "INFO", "event": "chat_message", "request_id": "dae43040", "session": "test-179", "message_length": 39}
+{"ts": "2026-10-08T16:13:51", "level": "INFO", "event": "llm_call", "request_id": "4eb982f8", "model": "llama3.2:1b", "attempt": 1, "prompt_tokens": 554, "completion_tokens": 18, "latency_ms": 10335, "status": "ok"}
+{"ts": "2026-10-08T16:13:51", "level": "INFO", "event": "http_request", "request_id": "4eb982f8", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 10337}
+INFO:     127.0.0.1:48422 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:52", "level": "INFO", "event": "llm_call", "request_id": "5b6ee03d", "model": "llama3.2:1b", "attempt": 1, "prompt_tokens": 563, "completion_tokens": 42, "latency_ms": 12769, "status": "ok"}
+{"ts": "2026-10-08T16:13:52", "level": "INFO", "event": "http_request", "request_id": "5b6ee03d", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 12770}
+INFO:     127.0.0.1:48400 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:52", "level": "INFO", "event": "llm_call", "request_id": "8b55a141", "model": "llama3.2:1b", "attempt": 1, "prompt_tokens": 593, "completion_tokens": 16, "latency_ms": 8918, "status": "ok"}
+{"ts": "2026-10-08T16:13:52", "level": "INFO", "event": "http_request", "request_id": "8b55a141", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 8920}
+INFO:     127.0.0.1:48442 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:53", "level": "INFO", "event": "llm_call", "request_id": "f486e0a4", "model": "llama3.2:1b", "attempt": 1, "prompt_tokens": 532, "completion_tokens": 33, "latency_ms": 8502, "status": "ok"}
+{"ts": "2026-10-08T16:13:53", "level": "INFO", "event": "http_request", "request_id": "f486e0a4", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 8503}
+INFO:     127.0.0.1:48466 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:54", "level": "INFO", "event": "llm_call", "request_id": "dae43040", "model": "llama3.2:1b", "attempt": 1, "prompt_tokens": 587, "completion_tokens": 15, "latency_ms": 7083, "status": "ok"}
+{"ts": "2026-10-08T16:13:54", "level": "INFO", "event": "http_request", "request_id": "dae43040", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 7084}
+INFO:     127.0.0.1:48486 - "POST /chat HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1061050]

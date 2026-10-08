@@ -1,0 +1,46 @@
+{
+  "label": "avant",
+  "date": "2026-10-08 09:30",
+  "commit": "avant",
+  "note": "Valeurs reprises de analyse_avant.md (mesures manuelles du 8 octobre 2026), au format de tests_auto.py pour servir de référence.",
+  "consommation": {
+    "executions": 3,
+    "messages_par_execution": 15,
+    "appels_llm": 15,
+    "appels_gros_modele": 15,
+    "part_gros_modele_pct": 100.0,
+    "tokens_entree_par_message": 1225.3,
+    "tokens_sortie_par_message": 205.4,
+    "tokens_total": 21461,
+    "latence_moyenne_s": 5.51,
+    "latence_p95_s": 8.24,
+    "longueur_moyenne_reponse": 748,
+    "energie_wh_par_message": 0.0986,
+    "co2_mg": 82.9,
+    "reco_dangereuses_allergie_auto": ["1/3", "2/3", "3/3"],
+    "reco_dangereuses_enfants_auto": null,
+    "reco_dangereuses_verification_manuelle": "question allergie : 4/9 ; avec la question enfants : 12/18"
+  },
+  "bout_en_bout": {"duree_s": 55.1, "messages_envoyes": 10},
+  "charge_simultanee": {
+    "clients_termines": 3, "clients": 5, "erreurs_500": 2,
+    "duree_totale_s": 101.4, "temps_par_message_client_s": 20.3, "sessions_distinctes": 1
+  },
+  "charge_echelonnee": {
+    "clients_termines": 5, "clients": 5, "erreurs_500": 0,
+    "duree_totale_s": 158.1, "temps_par_message_client_s": 29.2, "sessions_distinctes": 5
+  },
+  "panne_api": {
+    "erreurs_journalisees": 0,
+    "cause_visible_dans_log": false,
+    "reponses_erreur_enregistrees": 3,
+    "reponse_client": "Désolé, une erreur est survenue. Réessayez plus tard.",
+    "health_code": 200
+  },
+  "ollama_injoignable": {"health_code": 200, "note": "non mesuré AVANT ; /health répondait toujours 200"},
+  "catalogue_json_invalide": {"serveur_demarre": false, "erreur_detectee": false, "health_code": null,
+                              "lignes_de_log_au_demarrage": 75},
+  "catalogue_allergene_retire": {"serveur_demarre": true, "erreur_detectee": false, "beffroi_propose": true,
+                                 "health_code": 200, "note": "Beffroi proposé dans 2 réponses sur 3"},
+  "confidentialite": {"note": "profil complet (nom, e-mail, allergies, âge des enfants) affiché dans la console à chaque message"}
+}
