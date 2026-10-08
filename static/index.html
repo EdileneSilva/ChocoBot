@@ -82,7 +82,7 @@ function add(text, who){
   log.appendChild(d); log.scrollTop = log.scrollHeight; return d;
 }
 function welcome(){
-  add("Bonjour, je suis Clémence, conseillère à la Maison Delcourt. Pour quelle occasion cherchez-vous des chocolats ?", "bot");
+  add("Bonjour, je suis Clémence, votre assistante IA à la Maison Delcourt. Pour quelle occasion cherchez-vous des chocolats ?", "bot");
 }
 async function post(path, payload){
   const r = await fetch(path, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)});
