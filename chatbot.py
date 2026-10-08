@@ -1,6 +1,8 @@
 import json, os, re, unicodedata
 import db
 import llm
+import time
+from observability import log_event
 
 with open(os.path.join(os.path.dirname(__file__), "data", "catalog.json"), encoding="utf-8") as f:
     CATALOG = json.load(f)
@@ -61,7 +63,7 @@ def filter_catalog(allergies):
 
 def handle_chat(session_id, message, allergies=None):
     db.save_message(session_id, "user", message)
-    print(f"[chat] : {message}")
+    log_event("info", "chat_message", session=session_id[:8], message_length=len(message))
 
     allergies = allergies or []
     catalog = filter_catalog(allergies)
@@ -70,10 +72,16 @@ def handle_chat(session_id, message, allergies=None):
     )
     messages = [{"role": "system", "content": system}] + db.get_history(session_id)
 
+    debut = time.perf_counter()
     try:
         reply, usage = llm.chat(llm.BIG_MODEL, messages, max_tokens=1500)
-    except Exception:
+        log_event("info", "llm_call", model=usage["model"], prompt_tokens=usage["prompt_tokens"],
+                completion_tokens=usage["completion_tokens"],
+                latency_ms=round((time.perf_counter() - debut) * 1000), status="ok")
+    except Exception as e:
+        log_event("error", "llm_call_failed", exc_info=True, model=llm.BIG_MODEL,
+                error=type(e).__name__, detail=str(e),
+                latency_ms=round((time.perf_counter() - debut) * 1000))
         reply = "Désolé, une erreur est survenue. Réessayez plus tard."
-
     db.save_message(session_id, "assistant", reply)
     return {"reply": reply}
