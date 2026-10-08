@@ -24,13 +24,10 @@ small{color:#7a6657}
 <header><h1>Back-office ChocoBot · Maison Delcourt</h1></header>
 <main>
  <div class="stats">
-  <div class="stat"><b id="nc">–</b>clients</div>
   <div class="stat"><b id="nm">–</b>messages (200 derniers)</div>
   <div class="stat"><b id="mode">–</b>modèle LLM (Ollama)</div>
   <div class="stat"><b>non suivi</b>tokens / coût / erreurs</div>
  </div>
- <h2>Clients</h2>
- <div class="wrap"><table id="tc"></table></div>
  <h2>Conversations</h2>
  <div class="wrap"><table id="tm"></table></div>
  <p><small>Base SQLite : fichier <code>chocobot.db</code> à la racine du projet.</small></p>
@@ -46,10 +43,8 @@ function table(el, cols, rows){
     }).join("") + "</tr>").join("");
 }
 fetch("/admin/data").then(r => r.json()).then(d => {
-  document.getElementById("nc").textContent = d.customers.length;
   document.getElementById("nm").textContent = d.messages.length;
   document.getElementById("mode").textContent = d.llm.big;
-  table(document.getElementById("tc"), [["created_at","Date"],["name","Nom"],["email","Email"],["allergies","Allergies"],["children_ages","Enfants"],["session_id","Session"]], d.customers);
   table(document.getElementById("tm"), [["created_at","Date"],["session_id","Session"],["role","Rôle"],["content","Message"]], d.messages);
 });
 </script>

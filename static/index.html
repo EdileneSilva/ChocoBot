@@ -37,10 +37,11 @@ aside{padding:20px;align-self:start}
 aside h2{margin:0 0 4px;font-size:1.05rem}
 aside p{margin:0 0 14px;font-size:.85rem;color:#6b5445;font-style:italic}
 aside label{display:block;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin:10px 0 3px;color:var(--cacao2)}
-.save{width:100%;margin-top:16px;padding:11px 8px}
-#saved{margin-top:8px;font-size:.82rem;color:#3d7a3d;min-height:1.2em}
 button.go:disabled{opacity:.55;cursor:wait}
-aside input{width:100%;padding:9px 10px;border:1px solid var(--ligne);border-radius:5px;font:inherit;background:#fff}
+fieldset{border:0;padding:0;margin:0}
+fieldset legend{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cacao2)}
+aside label.allergen{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:normal;font-size:.92rem;margin:9px 0}
+aside input[type="checkbox"]{width:16px;height:16px;margin:0;accent-color:var(--framboise)}
 </style>
 </head>
 <body>
@@ -59,21 +60,24 @@ aside input{width:100%;padding:9px 10px;border:1px solid var(--ligne);border-rad
  </section>
  <aside class="box">
   <h2>Pour mieux vous conseiller</h2>
-  <p>Ces informations nous aident à choisir le coffret idéal.</p>
-  <label for="name">Prénom et nom</label><input id="name">
-  <label for="email">Email</label><input id="email" type="email">
-  <label for="allergies">Allergies</label><input id="allergies" placeholder="ex. noisettes, gluten">
-  <label for="kids">Âge des enfants</label><input id="kids" placeholder="ex. 6, 9">
-  <button id="save" class="go save" type="button">Enregistrer mes informations</button>
-  <div id="saved"></div>
+  <p>Les allergènes cochés servent uniquement à filtrer les coffrets proposés. Ils ne sont pas enregistrés.</p>
+  <fieldset>
+   <legend>Allergènes à éviter</legend>
+   <label class="allergen"><input type="checkbox" name="allergies" value="lait"> Lait</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="fruits à coque"> Fruits à coque</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="soja"> Soja</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="gluten"> Gluten</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="œufs"> Œufs</label>
+   <label class="allergen"><input type="checkbox" name="allergies" value="arachides"> Arachides</label>
+  </fieldset>
  </aside>
 </main>
 <script>
 const log = document.getElementById("log");
-const ids = ["name", "email", "allergies", "kids"];
 const el = id => document.getElementById(id);
 let sid = localStorage.sid || (localStorage.sid = crypto.randomUUID());
 let busy = false;
+const selectedAllergies = () => [...document.querySelectorAll('input[name="allergies"]:checked')].map(input => input.value);
 
 function add(text, who){
   const d = document.createElement("div"); d.className = "msg " + who;
@@ -96,7 +100,9 @@ async function send(text){
   const wait = add("", "bot");
   wait.lastChild.innerHTML = '<span class="dots"><span></span><span></span><span></span></span>';
   try {
-    wait.lastChild.textContent = (await post("/chat", {session_id: sid, message: text})).reply;
+    wait.lastChild.textContent = (await post("/chat", {
+      session_id: sid, message: text, allergies: selectedAllergies()
+    })).reply;
   } catch (e) {
     wait.lastChild.textContent = "Désolé, une erreur est survenue.";
   }
@@ -110,23 +116,10 @@ el("send").onsubmit = e => {
 };
 document.querySelectorAll(".chip").forEach(c => c.onclick = () => send(c.textContent));
 
-// Les informations ne partent qu'au clic sur le bouton
-el("save").onclick = async () => {
-  el("save").disabled = true;
-  try {
-    await post("/profile", {session_id: sid, name: el("name").value, email: el("email").value,
-                            allergies: el("allergies").value, children_ages: el("kids").value});
-    el("saved").style.color = "#3d7a3d"; el("saved").textContent = "✓ Informations enregistrées";
-  } catch (e) {
-    el("saved").style.color = "#a3243b"; el("saved").textContent = "Échec de l'enregistrement";
-  }
-  el("save").disabled = false;
-};
-ids.forEach(id => el(id).addEventListener("input", () => el("saved").textContent = ""));
-
 el("reset").onclick = () => {
   sid = localStorage.sid = crypto.randomUUID();
-  log.innerHTML = ""; ids.forEach(id => el(id).value = ""); el("saved").textContent = "";
+  log.innerHTML = "";
+  document.querySelectorAll('input[name="allergies"]').forEach(input => { input.checked = false; });
   welcome();
 };
 welcome();

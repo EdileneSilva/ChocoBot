@@ -31,7 +31,7 @@ def espion(*args, **kwargs):
     return texte, usage
 
 llm.chat = espion
-import chatbot, db  # importés après le remplacement
+import chatbot  # importé après le remplacement
 
 try:
     from codecarbon import EmissionsTracker
@@ -51,14 +51,10 @@ if tracker:
 debut = time.perf_counter()
 for i in range(N_CONV):
     sid = f"mesure-{LABEL}-{run}-{i}"
-    try:  # le profil n'existera peut-être plus après les corrections
-        db.save_customer(sid, "Client Test", "client@example.com", "noisettes", "6, 9")
-    except (AttributeError, TypeError):
-        pass
     for msg in SCENARIO:
         n = len(appels)
         t0 = time.perf_counter()
-        rep = chatbot.handle_chat(sid, msg)["reply"]  # ADAPTER si la signature change
+        rep = chatbot.handle_chat(sid, msg, ["fruits à coque"])["reply"]
         reponses.append({"conversation": i, "question": msg, "reponse": rep,
                          "duree_s": round(time.perf_counter() - t0, 2), "appels_llm": len(appels) - n})
 duree_totale = time.perf_counter() - debut

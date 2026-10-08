@@ -34,7 +34,9 @@ def filter_catalog(allergies):
     if not allergies:
         return CATALOG
 
-    normalized_allergies = normalize_allergen(allergies)
+    if isinstance(allergies, str):
+        allergies = [allergies]
+    normalized_allergies = normalize_allergen(" ".join(allergies))
     categories = {
         category
         for category, aliases in ALLERGEN_ALIASES.items()
@@ -57,32 +59,15 @@ def filter_catalog(allergies):
     return [product for product in CATALOG if not contains_allergen(product)]
 
 
-def customer_context(customer):
-    """Décrit au LLM ce que le client a enregistré dans le formulaire."""
-    if not any(customer.get(k) for k in ["name", "email", "allergies", "children_ages"]):
-        return "\n\nInformations enregistrées sur le client : aucune."
-    lines = ["\n\nInformations enregistrées sur le client (saisies par lui dans le formulaire) :"]
-    if customer.get("name"):
-        lines.append(f"- Nom : {customer['name']}")
-    if customer.get("email"):
-        lines.append(f"- Email : {customer['email']}")
-    if customer.get("allergies"):
-        lines.append(f"- Allergies : {customer['allergies']}")
-    if customer.get("children_ages"):
-        lines.append(f"- Âge des enfants : {customer['children_ages']}")
-    lines.append("Appelle le client par son prénom, tiens compte de ces informations et réponds à toute question le concernant.")
-    return "\n".join(lines)
-
-
-def handle_chat(session_id, message):
+def handle_chat(session_id, message, allergies=None):
     db.save_message(session_id, "user", message)
-    customer = db.get_customer(session_id)
-    print(f"[chat] {customer} : {message}")
+    print(f"[chat] : {message}")
 
-    catalog = filter_catalog(customer.get("allergies"))
+    allergies = allergies or []
+    catalog = filter_catalog(allergies)
     system = SYSTEM_PROMPT + "\n\nCatalogue des coffrets compatibles avec les allergies indiquées : " + json.dumps(
         catalog, ensure_ascii=False
-    ) + customer_context(customer)
+    )
     messages = [{"role": "system", "content": system}] + db.get_history(session_id)
 
     try:
