@@ -1,0 +1,128 @@
+{
+  "label": "avant",
+  "messages": 15,
+  "appels_llm": 15,
+  "appels_par_modele": {
+    "llama3.2:3b": 15
+  },
+  "erreurs_llm": 0,
+  "tokens_entree_total": 18521,
+  "tokens_sortie_total": 3168,
+  "tokens_entree_par_message": 1234.7,
+  "tokens_sortie_par_message": 211.2,
+  "latence_moyenne_s": 6.08,
+  "latence_p95_s": 10.11,
+  "latence_max_s": 10.83,
+  "longueur_moyenne_reponse": 755,
+  "recommandations_dangereuses": "2/3 (à vérifier à la main)",
+  "duree_totale_s": 91.2,
+  "energie_kwh": 0.0016901550155242803,
+  "co2_kg": 9.471459691496514e-05,
+  "detail_reponses": [
+    {
+      "conversation": 0,
+      "question": "Quels sont vos horaires ?",
+      "reponse": "Bonjour Clémence !\n\nMes horaires de travail sont de 9h30 à 18h00, de lundi à samedi. Je suis disponible pour prendre rendez-vous ou répondre à vos questions entre ces heures. Mais n'hésitez pas à me contacter par téléphone ou courriel avant 18h00 si vous avez besoin de conseils ou de plus d'informations sur nos chocolats.\n\nEt maintenant, voyons si nous pouvons vous aider à trouver le coffret parfait pour vous et vos enfants... Quels sont vos enfants's préférences en matière de chocolats ?",
+      "duree_s": 10.11,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 0,
+      "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+      "reponse": "Bien sûr, nous avons quelques options pour vous avec un budget de 30 euros !\n\nÉtant donné que votre fils est allergique aux noisettes, je vais vous recommander quelques coffrets qui ne contiennent pas de noisettes. Voici quelques options :\n\n* Le **Coffret Sans Noix** (id : C04) avec des ganaches de vanille, de framboise et de menthe, ce coffret est parfait pour les enfants sensibles aux allergies. Il fait 28 euros.\n* Le **Coffret Gaufre de Lille** (id : C03) est un autre excellent choix, mais attention, il contient des spéculoos qui peuvent contenir des noisettes. Nous pourrions lui substituer les spéculoos par un autre élément, comme des céréales sans noisettes. Ce coffret fait 18 euros, mais nous devrions y ajouter 10 euros pour le remplacer, pour que cela puisse vous convenir.\n* Le **Coffret Beffroi** (id : C01) contient un praliné noisette, donc ce n'est pas une option idéale pour votre fils. Cependant, nous pourrions vous proposer un cofret similaire, mais sans praliné, avec des ganaches et des céréales sans noisettes. Ce coffret fait 24 euros.\n\nPouvez-vous me dire si l'un de ces coffrets vous convient, ou si vous avez d'autres préférences ?",
+      "duree_s": 7.22,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 0,
+      "question": "Et pour les enfants, vous avez quoi ?",
+      "reponse": "Les enfants adorent les chocolats ! Nous avons quelques coffrets qui sont spécialement conçus pour les enfants et qui sont sûrs pour leurs allergies.\n\nPour les enfants de 6 et 9 ans, je recommande le **Coffret Gaufre de Lille** (id : C03). C'est un coffret classique et délicieux qui contient des gaufres vergeoises, du chocolat au lait et des spéculoos. Il fait 18 euros.\n\nPuisque nous avons déjà discuté du problème de noisettes, nous pourrions y substituer les spéculoos par un autre élément, comme des céréales sans noisettes. Cela nous permettrait de vous proposer un coffret similaire, mais sans problème de allergies.\n\nNous avons aussi le **Coffret Mendiants des Enfants** (id : C07) qui est spécialement conçu pour les enfants. C'est un coffret petit et délicieux qui contient des mendiants lait et des billes croustillantes. Il fait 14 euros.\n\nPouvez-vous me dire si l'un de ces coffrets vous convient pour vos enfants ?",
+      "duree_s": 8.94,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 0,
+      "question": "Quels sont vos horaires ?",
+      "reponse": "Mes horaires de travail sont de 9h30 à 18h00, de lundi à samedi. Je suis disponible pour prendre rendez-vous ou répondre à vos questions entre ces heures.\n\nMais maintenant, revenons à vos enfants ! Nous avons une excellente option pour eux, et je voudrais vous en parler en détail. Le **Coffret Gaufre de Lille** est un excellent choix pour les enfants, et nous pouvons y ajouter des éléments pour en rendre encore plus spéciale. Qu'en pensez-vous ?",
+      "duree_s": 2.78,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 0,
+      "question": "Merci, je prends le coffret sans noix !",
+      "reponse": "Excellente choice ! Le **Coffret Sans Noix** (id : C04) est un excellent choix pour vous et vos enfants. Je vais vous préparer un coffret avec des ganaches de vanille, de framboise et de menthe. Nous avons également ajouté des céréales sans noisettes pour remplacer les spéculoos du **Coffret Gaufre de Lille**, pour que votre fils puisse les consommer sans problème d'allergie.\n\nJe vais vous préparer un coffret avec 6 morceaux de ganache vanille, 4 morceaux de ganache framboise et 4 morceaux de ganache menthe. Nous avons également ajouté 6 morceaux de céréales sans noisettes pour compléter le coffret.\n\nLe prix de ce coffret est de 28 euros. Je vais vous mettre à l'écoute pour tout changement ou ajout que vous pourriez avoir.",
+      "duree_s": 5.88,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 1,
+      "question": "Quels sont vos horaires ?",
+      "reponse": "Bonjour Clément ! Je suis ravie de vous aider, même si nous ne sommes pas ensemble dans notre boutique. Pour répondre à votre question, les horaires de la boutique Delcourt sont les suivants :\n\n- Mardi, jeudi, samedi : de 10h00 à 13h00 et de 14h30 à 18h30\n- Vendredi : de 10h00 à 12h30 et de 15h00 à 18h30\n- Dimanche : fermé\n\nMais ne vous inquiétez pas, vous pouvez me contacter à tout moment pour recevoir de l'aide ou pour discuter de vos goûts de chocolat ! Quels sont vos souhaits pour un coffret ?",
+      "duree_s": 3.52,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 1,
+      "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+      "reponse": "Bonjour Clément ! Je suis heureuse de vous aider à trouver un coffret adapté aux goûts de votre fils, sans noisettes.\n\nJe vais vous présenter quelques options de coffrets que nous avons dans notre catalogue, qui pourraient convenir à votre budget et aux allergies de votre fils :\n\n- Le **Coffret Sans Noix** (id : C04) est une excellente option. Il contient une ganache vanille, une framboise et une menthe, tous sans noisettes. Le prix de ce coffret est de 28 euros.\n- Le **Coffret Ch'ti Noir** (id : C02) est un choix plus intense, mais sans noisettes. Il contient un noir 72% avec des orange confites et du gingembre. Le prix de ce coffret est de 32 euros, ce qui dépasse votre budget.\n\nJe pense que le **Coffret Sans Noix** serait une excellente option pour votre fils, car il contient des saveurs fraîches et variées qui devraient le plaire.\n\nQu'en pensez-vous ? Aimeriez-vous en savoir plus sur ce coffret ou avez-vous d'autres questions ?",
+      "duree_s": 6.75,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 1,
+      "question": "Et pour les enfants, vous avez quoi ?",
+      "reponse": "Les enfants sont toujours un plaisir à satisfaire ! Nous avons une gamme de coffrets especially conçus pour les enfants, qui sont délicieux et sûrs pour leur santé.\n\nLe **Coffret Gaufre de Lille** (id : C03) est une excellente option pour les enfants. Il contient une gaufre vergeoise, du chocolat au lait et des spéculoos. Malheureusement, cette option ne conviendra pas à votre fils, car il est allergique aux noisettes. Il n'y a pas de noisette dans ce coffret, mais comme il est allergique aux noisettes, nous devons être prudent.\n\nJe pense que nous devrions discuter de la façon dont votre fils peut manger ce coffret sans problème, car il n'y a pas de noisette. Mais, malheureusement, il n'est pas possible de le recommander comme solution pour votre fils. \n\nNous avons aussi un **Coffret Mendiants des Enfants** (id : C07) adapté aux enfants. Il contient des mendiants au lait et des billes croustillantes. De même, il ne contient pas de noisette, mais il est allergique aux fruits à la coque et au gluten, ce qui pourrait être un problème pour votre fils.\n\nEt je me demande, quels sont les goûts de votre fils ? Aimeriez-vous en savoir plus sur nos autres options ?",
+      "duree_s": 8.15,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 1,
+      "question": "Quels sont vos horaires ?",
+      "reponse": "Mon client ! Je suis désolée de vous avoir interrompue. Mes horaires sont les mêmes que je vous ai indiqués précédemment :\n\n- Mardi, jeudi, samedi : de 10h00 à 13h00 et de 14h30 à 18h30\n- Vendredi : de 10h00 à 12h30 et de 15h00 à 18h30\n- Dimanche : fermé\n\nMais, comme je l'ai dit précédemment, vous pouvez me contacter à tout moment pour recevoir de l'aide ou pour discuter de vos goûts de chocolat ! Qu'est-ce que vous attendez que je vous dise, mon client ?",
+      "duree_s": 4.01,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 1,
+      "question": "Merci, je prends le coffret sans noix !",
+      "reponse": "Très bien ! Je vais vous préparer le **Coffret Sans Noix** (id : C04) et vous le livrerons à votre domicile.\n\nPour confirmé, je vais résumer les détails :\n\n* Le coffret contient une ganache vanille, une framboise et une menthe\n* Il ne contient pas de noisettes\n* Le prix est de 28 euros\n\nJe vais vous envoyer le coffret dans les plus brefs délais. N'hésitez pas à me contacter si vous avez des questions ou si vous souhaitez des informations supplémentaires.\n\nEt... je vais prendre les informations de votre fils, pour qu'il puisse recevoir le coffret sans problème. Son âge est de 6 et 9 ans, n'est-ce bien ça ?",
+      "duree_s": 5.1,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 2,
+      "question": "Quels sont vos horaires ?",
+      "reponse": "Bonjour Client Test ! Enchanté de vous aider pour vos besoins en chocolats.\n\nConcernant mes horaires, je suis disponible de lundi à vendredi de 9h30 à 18h00. Je peux également vous aider par téléphone ou par email, à votre convenance. N'hésitez pas à me contacter si vous avez des questions ou si vous souhaitez réservez un coffret.\n\nMaintenant, je me demande... vous cherchez un coffret pour vous-même ou pour les enfants ? Ou peut-être pour un cadeau spécial ?",
+      "duree_s": 3.66,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 2,
+      "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+      "reponse": "Bienvenue à la Maison Delcourt !\n\nJe vois que vous cherchez un coffret pour moins de 30 euros, ce qui nous permet de proposer une grande variété de choix. Et, bien sûr, nous prenons très au sérieux les allergies, surtout pour nos petits clients !\n\nPuisque votre fils est allergique aux noisettes, je vais vous recommander quelques coffrets qui sont sans noisettes. Voici quelques options qui devraient vous plaire :\n\n* Le Coffret Sans Noix (C04) est une excellente option, il propose une ganache vanille, des framboises et de la menthe, tout sans noisettes. Il coûte 28 euros.\n* Le Coffret Gaufre de Lille (C03) est un autre choix qui pourrait vous intéresser. Bien qu'il contienne des spéculoos, il est sans noisettes et propose une combinaison de chocolat au lait et de gaufre vergeoise. Il coûte 18 euros.\n* Le Grand Coffret Noël (C06) peut également être une bonne option si vous voulez un coffret plus complet. Bien qu'il contienne des truffes, il est sans noisettes et propose une grande variété de chocolats. Il coûte 59 euros, mais si vous choisissez de le réduire en deux, il deviendrait 29,90 euros.\n\nQu'en pensez-vous, Client Test ? Avez-vous l'un de ces coffrets en tête ou aimeriez-vous en savoir plus sur l'un d'eux ?",
+      "duree_s": 10.83,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 2,
+      "question": "Et pour les enfants, vous avez quoi ?",
+      "reponse": "Les enfants ! Nous avons quelques coffrets spécialement conçus pour les petits, qui sont non seulement délicieux, mais aussi sûrs pour les enfants sensibles aux allergenes.\n\nPour votre fils de 6 ans et de 9 ans, je vous recommande le Coffret Gaufre de Lille (C03) que j'ai mentionné précédemment. Il est un classique français qui les fera sourire, et il est sans noisettes et sans gluten. Il coûte 18 euros.\n\nMais si vous voulez quelque chose de plus spécial, nous avons également un Coffret Mendiants des Enfants (C07) qui est conçu spécifiquement pour les enfants. Il contient des mendiants lait et des billes croustillantes, tout en toute sécurité pour les enfants sensibles aux allergenes. Il coûte 14 euros.\n\nEt si vous voulez un coffret un peu plus complet, nous avons également le Grand Coffret Noël (C06) qui contient une grande variété de chocolats, y compris des truffes. Bien que ce coffret soit plus grand et coûte 59 euros, il est un excellent choix si vous voulez offrir un cadeau spécial à vos enfants.\n\nQu'est-ce que vous pensez, Client Test ? Quel coffret pensez-vous que vos enfants aimeront le plus ?",
+      "duree_s": 6.68,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 2,
+      "question": "Quels sont vos horaires ?",
+      "reponse": "Bien sûr ! Mes horaires de travail sont les suivants :\n\n* Lundi à vendredi : 9h30 à 18h00\n* Samedi : 10h00 à 17h00\n* Dimanche : fermé\n\nMais si vous voulez me contacter hors horaires, n'hésitez pas à envoyer un email ou à me téléphoner. Je serai ravi de vous aider aussi vite que possible !\n\nMaintenant, si vous voulez, je peux vous aider à choisir un coffret pour vos enfants. Qu'est-ce que vous en pensez ?",
+      "duree_s": 2.97,
+      "appels_llm": 1
+    },
+    {
+      "conversation": 2,
+      "question": "Merci, je prends le coffret sans noix !",
+      "reponse": "Excellente choix, Client Test !\n\nJe vais vous préparer le Coffret Sans Noix (C04) avec une ganache vanille, des framboises et de la menthe. Vous allez adorer !\n\nEt pour vos enfants, je vais vous recommander le Coffret Gaufre de Lille (C03) ou le Coffret Mendiants des Enfants (C07), comme je l'ai mentionné précédemment. Qu'est-ce que vous préférez ? Je peux vous aider à choisir entre les deux.\n\nEt, pour confirmé, le Coffret Sans Noix pour vous coûtera... 28 euros. Et le Coffret Gaufre de Lille ou le Coffret Mendiants des Enfants pour vos enfants coûteront 18 euros chacun.\n\nJe vais vous aider à réserver ces coffrets. Qu'est-ce que vous dites ?",
+      "duree_s": 4.53,
+      "appels_llm": 1
+    }
+  ]
+}

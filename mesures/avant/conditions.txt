@@ -1,0 +1,7 @@
+Thu Oct  8 09:25:36 AM CEST 2026
+Model name:                              Intel(R) Core(TM) i7-9850H CPU @ 2.60GHz
+Mem:            14Gi       9.2Gi       1.2Gi       1.7Gi       5.9Gi       5.7Gi
+Quadro T2000
+1
+ollama version is 0.40.0
+Python 3.14.3
