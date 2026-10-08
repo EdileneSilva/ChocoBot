@@ -34,6 +34,7 @@ with open(os.path.join(os.path.dirname(__file__), "data", "faq.json"), encoding=
 _cache = {}        # réponses déjà calculées pour un premier message (en mémoire, jamais enregistrées)
 CACHE_MAX = 200
 MAX_TOKENS = 300   # filet de sécurité : la consigne demande 3 à 4 phrases (≈ 100 à 150 tokens)
+HISTORY_MAX = 6   # 3 derniers échanges (le message en cours compris) envoyés au modèle
 
 
 def clear_response_cache():
@@ -103,6 +104,14 @@ def filter_catalog(allergies):
     return [product for product in CATALOG if not contains_allergen(product)]
 
 
+def format_catalog(catalog):
+    """Une ligne par coffret : nom, prix, contenu, allergènes (moins de tokens que le JSON complet)."""
+    return "\n".join(
+        f"- {p['nom']} : {p['prix']} € ; {', '.join(p['contenu'])} ; allergènes : {', '.join(p['allergenes']) or 'aucun'}"
+        for p in catalog
+    )
+
+
 def handle_chat(session_id, message, allergies=None):
     purge_expired_cache()
     db.save_message(session_id, "user", message)
@@ -116,11 +125,10 @@ def handle_chat(session_id, message, allergies=None):
 
     allergies = allergies or []
     catalog = filter_catalog(allergies)
-    system = SYSTEM_PROMPT + "\n\nCatalogue des coffrets compatibles avec les allergies indiquées : " + json.dumps(
-        catalog, ensure_ascii=False
-    )
+    system = SYSTEM_PROMPT + "\n\nCatalogue des coffrets compatibles avec les allergies indiquées :\n" + format_catalog(catalog)
     history = db.get_history(session_id)
     cache_key = None
+    
     if len(history) == 1:   # premier message de la conversation
         cache_key = (" ".join(re.findall(r"\w+", normalize_allergen(message))), tuple(sorted(allergies)))
         if cache_key in _cache:
@@ -128,7 +136,7 @@ def handle_chat(session_id, message, allergies=None):
             reply = _cache[cache_key][1]
             db.save_message(session_id, "assistant", reply)
             return {"reply": reply}
-    messages = [{"role": "system", "content": system}] + history
+    messages = [{"role": "system", "content": system}] + history[-HISTORY_MAX:]
 
     model = choose_model(message)
     debut = time.perf_counter()
