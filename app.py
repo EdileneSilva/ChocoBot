@@ -1,12 +1,12 @@
 import asyncio
-import os, time, uuid
+import os, secrets, time, uuid
 from contextlib import asynccontextmanager
 from typing import Literal
 
 import sentry_sdk
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, Field
 
 from chatbot import CATALOG_ERREURS, clear_response_cache, handle_chat, purge_expired_cache  # importe llm.py avant sentry_sdk.init
@@ -52,7 +52,22 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="ChocoBot - Maison Delcourt", lifespan=lifespan)
-app.mount("/static", StaticFiles(directory="static"), name="static")
+admin_auth = HTTPBasic()
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+
+
+def require_admin(credentials: HTTPBasicCredentials = Depends(admin_auth)) -> None:
+    if not ADMIN_PASSWORD:
+        raise HTTPException(status_code=503, detail="Le back-office n'est pas configuré.")
+
+    username_matches = secrets.compare_digest(credentials.username, "admin")
+    password_matches = secrets.compare_digest(credentials.password, ADMIN_PASSWORD)
+    if not (username_matches and password_matches):
+        raise HTTPException(
+            status_code=401,
+            detail="Identifiants invalides.",
+            headers={"WWW-Authenticate": "Basic"},
+        )
 
 
 class ChatIn(BaseModel):
@@ -90,10 +105,11 @@ def delete_session(session_id: str):
 # Back-office de l'équipe Delcourt : pratique pour voir qui a écrit quoi
 @app.get("/admin")
 def admin():
+    # This page is only the login shell; conversation data remains protected by /admin/data.
     return FileResponse("static/admin.html")
 
 
-@app.get("/admin/data")
+@app.get("/admin/data", dependencies=[Depends(require_admin)])
 def admin_data():
     data = db.get_all()
     data["llm"] = {"big": llm.BIG_MODEL, "small": llm.SMALL_MODEL}
