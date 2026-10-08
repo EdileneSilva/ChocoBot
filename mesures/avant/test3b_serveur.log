@@ -1,0 +1,59 @@
+INFO:     Started server process [708306]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58600 - "POST /profile HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:52696 - "POST /profile HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:52716 - "POST /profile HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:52724 - "POST /profile HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:52742 - "POST /profile HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:52722 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:52712 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:58604 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:52728 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:52752 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:44232 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:44238 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:44244 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:46382 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:46394 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:52560 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:52564 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:53534 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:48952 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:37668 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:37674 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:54788 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:40492 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:52156 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:46206 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:48052 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48054 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39774 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39784 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54916 - "POST /chat HTTP/1.1" 200 OK

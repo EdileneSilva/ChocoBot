@@ -46,6 +46,47 @@ CodeCarbon a appliqué le facteur d'émission français (56 g CO₂e/kWh) aux tr
 
 - **La consommation en valeur absolue est faible** (0,1 Wh par message), parce que le modèle tourne en local sur une machine française. Ce qui compte pour le projet, c'est le **gain relatif** entre avant et après.
 
+### Test 2 : de bout en bout, en passant par le serveur
+
+`time python load_test.py 2` (2 conversations, 10 messages), serveur `uvicorn app:app` sans `--reload`, base vide :
+
+| Indicateur | AVANT |
+|---|---|
+| Durée totale (`real`) | **55,1 s** |
+| Durée moyenne par message | **5,5 s** |
+
+Cette valeur est cohérente avec la latence moyenne mesurée par `mesure.py` (5,5 s) : le passage par l'API FastAPI ne coûte presque rien, c'est le modèle qui prend le temps.
+
+### Test 3 : pic de charge (5 clients en parallèle)
+
+Nous avons testé deux façons de faire arriver 5 clients de 5 messages (25 messages attendus), serveur `uvicorn app:app` et base vide à chaque fois :
+
+- **3a, arrivée simultanée** : `time (for i in 1 2 3 4 5; do python load_test.py 1 & done; wait)`, lancé deux fois (log : `test3_serveur.log`, dernière exécution) ;
+- **3b, arrivée échelonnée** (1 seconde d'écart) : `time (for i in 1 2 3 4 5; do python load_test.py 1 & sleep 1; done; wait)`, lancé une fois (log : `test3b_serveur.log`).
+
+Une première tentative de 3a a été écartée : le serveur n'était pas encore démarré (5 × `Connection refused` en 0,1 s).
+
+| Indicateur | 3a — exéc. 1 | 3a — exéc. 2 | **3a — moyenne** | **3b** |
+|---|---|---|---|---|
+| Clients ayant terminé | 3 / 5 | 3 / 5 | **3 / 5** | **5 / 5** |
+| Messages traités | 15 / 25 | 15 / 25 | **15 / 25 (60 %)** | **25 / 25 (100 %)** |
+| Erreurs HTTP 500 | 2 | 2 | **2** | **0** |
+| Sessions distinctes en base | 1 | 1 | **1** | **5** |
+| Durée totale (`real`) | 106,6 s | 96,2 s | **101,4 s** | **158,1 s** |
+| Temps moyen d'une conversation, vu par un client | ≈ 107 s | ≈ 96 s | **≈ 101 s** | **≈ 146 s** |
+| Temps moyen par message, vu par un client | ≈ 21 s | ≈ 19 s | **≈ 20 s** | **≈ 29 s** |
+| Débit du serveur (temps total / messages traités) | 7,1 s | 6,4 s | **6,8 s** | **6,3 s** |
+| Erreur détectée ou alertée ? | Non | Non | **Non** | — |
+
+**Ce que l'on observe :**
+
+- **Quand les clients arrivent exactement en même temps (3a), le serveur casse.** Dans les deux exécutions, 2 clients sur 5 ont reçu une erreur 500 dès leur premier appel (`/profile`), avec `sqlite3.InterfaceError: bad parameter or other API misuse` (`db.py:12`). L'application utilise une seule connexion SQLite partagée par toutes les requêtes (`db.py:3`, `check_same_thread=False`) : quand plusieurs écritures arrivent au même instant, elles se chevauchent. C'est le problème F7 du rapport d'audit, reproduit deux fois de suite.
+- **Avec une seconde d'écart (3b), plus aucune erreur** : les écritures ne se chevauchent plus. Le défaut n'apparaît donc qu'en cas d'arrivées vraiment simultanées, ce qui est exactement la situation d'un pic comme le Black Friday.
+- **Dans les deux cas, les clients font la queue.** Ollama traite les questions une par une : le serveur produit une réponse toutes les 6 à 7 secondes quel que soit le nombre de clients, si bien qu'avec 5 clients actifs chacun attend environ 29 secondes par message, contre 5,5 s quand il est seul.
+- **Personne n'est prévenu.** En 3a, le client voit une erreur 500 et la seule trace est un message dans le terminal du serveur.
+
+**Limite du test 3a :** `load_test.py` construit l'identifiant de session à partir de l'heure en secondes. Les 5 processus lancés dans la même seconde ont donc partagé **la même session** : les 3 clients restants ont écrit dans une seule conversation, dont l'historique a grossi plus vite. Le test 3b n'a pas ce défaut (5 sessions distinctes). Les deux variantes devront être refaites exactement de la même manière pour la mesure APRÈS.
+
 ## 2. Qualité et sécurité des réponses (vérification à la main)
 
 Le script ne cherche que le nom d'un coffret à risque dans la réponse à la question sur l'allergie. Nous avons relu toutes les réponses aux deux questions concernées : la question sur l'allergie (Q2) et la question suivante sur les enfants (Q3), posée dans la même conversation, donc toujours pour un enfant allergique.
@@ -93,6 +134,11 @@ Le cas le plus fréquent est le coffret « Mendiants des Enfants », présenté 
 | Tokens totaux (15 messages) | 21 461 |
 | Appels au modèle / part du gros modèle | 15 / 100 % |
 | Latence moyenne / p95 | 5,5 s / 8,2 s |
+| `load_test.py 2` (10 messages, de bout en bout) | 55,1 s |
+| Pic simultané (3a) : messages traités / erreurs 500 | 15/25 (60 %) / 2 |
+| Pic simultané (3a) : durée totale / temps par message vu par un client | 101,4 s / ≈ 20 s |
+| Pic échelonné (3b) : messages traités / erreurs 500 | 25/25 (100 %) / 0 |
+| Pic échelonné (3b) : durée totale / temps par message vu par un client | 158,1 s / ≈ 29 s |
 | Énergie / message | 0,099 Wh |
 | CO₂e (15 messages) | 82,9 mg |
 | Longueur moyenne des réponses | 748 caractères |
