@@ -1,5 +1,7 @@
 import sqlite3, time
 
+SESSION_RETENTION_SECONDS = 3 * 60
+
 conn = sqlite3.connect("chocobot.db", check_same_thread=False)
 # Remove profiles saved by earlier versions; profile data is no longer collected or retained.
 conn.execute("DROP TABLE IF EXISTS customers")
@@ -9,8 +11,21 @@ conn.commit()
 
 
 def save_message(session_id, role, content):
+    now = time.time()
+    purge_expired_sessions(now)
     conn.execute("INSERT INTO messages (session_id, role, content, created_at) VALUES (?,?,?,?)",
-                 (session_id, role, content, time.time()))
+                 (session_id, role, content, now))
+    conn.commit()
+
+
+def purge_expired_sessions(now=None):
+    cutoff = (time.time() if now is None else now) - SESSION_RETENTION_SECONDS
+    conn.execute(
+        """DELETE FROM messages WHERE session_id IN (
+               SELECT session_id FROM messages GROUP BY session_id HAVING MAX(created_at) <= ?
+           )""",
+        (cutoff,),
+    )
     conn.commit()
 
 
