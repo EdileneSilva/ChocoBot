@@ -79,7 +79,10 @@ pratique pour mesurer l'état avant/après. Chaque message prend plusieurs secon
 ## Réglages facultatifs
 
 Pour changer de modèle ou simuler des pannes, copiez `.env.example` en `.env` (une seule fois : le refaire écrase vos
-réglages), décommentez les lignes voulues, puis relancez `uvicorn`.
+réglages), décommentez les lignes voulues, puis relancez `uvicorn`. Le back-office et son endpoint de données sont
+protégés par un formulaire de connexion : identifiant `admin`, mot de passe défini par `ADMIN_PASSWORD`. La page de
+connexion ne contient aucune conversation ; les données ne sont chargées qu'après authentification. Sans mot de passe
+configuré, l'accès est refusé. Choisissez un mot de passe long et unique ; pour tout accès à distance, utilisez HTTPS.
 
 ## Structure
 
