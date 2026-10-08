@@ -432,3 +432,9 @@ Test 3b — 5 x load_test.py 1, 1 s d'écart (25 messages)
 real	2m38.104s
 user	0m0.358s
 sys	0m0.094s
+Test 4 — panne API (FAIL_RATE=1), début : 11:19:09
+{"reply":"Désolé, une erreur est survenue. Réessayez plus tard."}
+{"reply":"Désolé, une erreur est survenue. Réessayez plus tard."}
+{"reply":"Désolé, une erreur est survenue. Réessayez plus tard."}
+/health :
+{"status":"ok"}  (code HTTP 200)

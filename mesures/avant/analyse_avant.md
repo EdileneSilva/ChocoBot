@@ -87,6 +87,28 @@ Une première tentative de 3a a été écartée : le serveur n'était pas encore
 
 **Limite du test 3a :** `load_test.py` construit l'identifiant de session à partir de l'heure en secondes. Les 5 processus lancés dans la même seconde ont donc partagé **la même session** : les 3 clients restants ont écrit dans une seule conversation, dont l'historique a grossi plus vite. Le test 3b n'a pas ce défaut (5 sessions distinctes). Les deux variantes devront être refaites exactement de la même manière pour la mesure APRÈS.
 
+### Test 4 : panne de l'API du modèle
+
+Panne simulée avec `FAIL_RATE=1` dans `.env` (100 % des appels au modèle échouent avec « 503 service unavailable »). Serveur `uvicorn app:app` redémarré pour lire le `.env`, base vide, log dans `test4_serveur.log`. Trois messages envoyés à `/chat` (session `test4`), puis un appel à `/health`.
+
+| Question | Résultat AVANT |
+|---|---|
+| Ce que voit le client | « Désolé, une erreur est survenue. Réessayez plus tard. » pour les 3 messages |
+| Code HTTP renvoyé par `/chat` | **200 OK** : le serveur indique que tout s'est bien passé |
+| Erreur dans le log du serveur | **Aucune** : seulement des lignes `200 OK` et le `print` du message client |
+| `/health` détecte la panne ? | **Non** : `{"status":"ok"}`, code 200 |
+| Quelqu'un est alerté ? | **Non** : aucun système d'alerte |
+| Diagnostic possible à partir des logs ? | **Non** : la cause (« 503 service unavailable ») n'apparaît nulle part |
+| Message d'erreur enregistré dans l'historique ? | **Oui** : enregistré 3 fois comme réponse de l'assistant |
+| Délai de détection | **Jamais** (la panne reste invisible tant qu'un client ne se plaint pas) |
+
+**Ce que l'on observe :**
+
+- **La panne est totalement invisible.** Le modèle est hors service à 100 %, mais vu de l'extérieur tout paraît normal : les réponses HTTP sont en 200, `/health` répond « ok » et le log ne contient aucune erreur. L'exception est capturée par le `except Exception` de `chatbot.py:43-44` puis oubliée (problèmes F1, F2, F3).
+- **On ne peut pas diagnostiquer.** Même en lisant le log, impossible de savoir que le problème vient du modèle, ni depuis quand.
+- **La panne pollue les conversations.** Le message d'excuse est enregistré comme une vraie réponse de l'assistant (`chatbot.py:46`) : il sera renvoyé au modèle dans l'historique des messages suivants (problème F9).
+- **Les données personnelles s'affichent dans la console** à chaque message (`print` de `chatbot.py:36`), alors qu'aucune information utile sur l'erreur n'y figure.
+
 ## 2. Qualité et sécurité des réponses (vérification à la main)
 
 Le script ne cherche que le nom d'un coffret à risque dans la réponse à la question sur l'allergie. Nous avons relu toutes les réponses aux deux questions concernées : la question sur l'allergie (Q2) et la question suivante sur les enfants (Q3), posée dans la même conversation, donc toujours pour un enfant allergique.
@@ -139,6 +161,9 @@ Le cas le plus fréquent est le coffret « Mendiants des Enfants », présenté 
 | Pic simultané (3a) : durée totale / temps par message vu par un client | 101,4 s / ≈ 20 s |
 | Pic échelonné (3b) : messages traités / erreurs 500 | 25/25 (100 %) / 0 |
 | Pic échelonné (3b) : durée totale / temps par message vu par un client | 158,1 s / ≈ 29 s |
+| Panne API : erreurs détectées et alertées | 0 % |
+| Panne API : `/health` détecte la panne ? | Non (200 « ok ») |
+| Panne API : erreur visible dans les logs ? | Non |
 | Énergie / message | 0,099 Wh |
 | CO₂e (15 messages) | 82,9 mg |
 | Longueur moyenne des réponses | 748 caractères |
