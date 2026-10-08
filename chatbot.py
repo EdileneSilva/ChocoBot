@@ -41,6 +41,20 @@ def find_faq(message):
     return next((entry for entry in FAQ if any(k in words for k in entry["mots_cles"])), None)
 
 
+MOTS_POLITESSE = ("merci", "ok", "oui", "non", "parfait", "super", "d accord",
+                  "bonjour", "bonsoir", "salut", "au revoir")
+MOTS_RISQUE = ("allerg", "euro", "prix", "budget", "enfant", "cadeau", "conseil", "recommand")
+
+
+def choose_model(message):
+    """Petit modèle pour la politesse et les confirmations, gros modèle pour tout conseil."""
+    texte = " ".join(re.findall(r"\w+", normalize_allergen(message)))
+    risque = any(mot.startswith(MOTS_RISQUE) for mot in texte.split())
+    if not risque and texte.startswith(MOTS_POLITESSE):
+        return llm.SMALL_MODEL
+    return llm.BIG_MODEL
+
+
 def normalize_allergen(value):
     normalized = unicodedata.normalize("NFD", value.casefold().replace("œ", "oe").replace("æ", "ae"))
     return "".join(char for char in normalized if unicodedata.category(char) != "Mn")
@@ -101,9 +115,10 @@ def handle_chat(session_id, message, allergies=None):
             return {"reply": reply}
     messages = [{"role": "system", "content": system}] + history
 
+    model = choose_model(message)
     debut = time.perf_counter()
     try:
-        reply, usage = llm.chat(llm.BIG_MODEL, messages, max_tokens=1500)
+        reply, usage = llm.chat(model, messages, max_tokens=1500)
         log_event("info", "llm_call", model=usage["model"], prompt_tokens=usage["prompt_tokens"],
                 completion_tokens=usage["completion_tokens"],
                 latency_ms=round((time.perf_counter() - debut) * 1000), status="ok")
@@ -112,7 +127,7 @@ def handle_chat(session_id, message, allergies=None):
                 _cache.pop(next(iter(_cache)))   # retire la plus ancienne entrée
             _cache[cache_key] = reply
     except Exception as e:
-        log_event("error", "llm_call_failed", exc_info=True, model=llm.BIG_MODEL,
+        log_event("error", "llm_call_failed", exc_info=True, model=model,
                 error=type(e).__name__, detail=str(e),
                 latency_ms=round((time.perf_counter() - debut) * 1000))
         reply = "Désolé, une erreur est survenue. Réessayez plus tard."
