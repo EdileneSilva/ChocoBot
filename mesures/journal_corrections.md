@@ -336,6 +336,52 @@ Vérification de bout en bout avec un vrai serveur (port 8765) : `GET /health` �
 - Le catalogue est lu au démarrage : après une correction du fichier, il faut redémarrer le serveur.
 - La validation ne détecte pas une erreur « plausible » (par exemple un prix modifié de 28 € à 26 €).
 
+## Mesures APRÈS (tests automatisés)
+
+**Outil :** nouveau script `tests_auto.py`, qui rejoue en une commande tous les tests de la phase 1 (consommation avec `mesure.py` ×3, bout en bout, pics de charge 3a et 3b, panne de l'API, serveur de modèles injoignable, catalogue corrompu 5a et 5b) et vérifie en plus qu'aucun texte de client n'apparaît dans les logs. Le code est copié dans un dossier temporaire : la base et le catalogue du projet ne sont jamais modifiés ; les serveurs de test tournent sur le port 8765, Sentry désactivé. Résultats : `mesures/apres/resultats.json`, `mesures/apres/rapport.md` et les logs des serveurs. La référence AVANT est `mesures/avant/resultats.json` (valeurs de `analyse_avant.md` au même format).
+
+Préparation : `load_test.py` accepte une autre adresse de serveur (`CHOCOBOT_URL`) et envoie `privacy_consent` ; `mesure.py` transmet les allergies (« fruits à coque ») et compte aussi les recommandations dangereuses à la question sur les enfants.
+
+Utilisation pour une version future :
+
+```bash
+python tests_auto.py --label v2 --rapide                                   # pannes et catalogue (≈ 1 min)
+python tests_auto.py --label v2 --reference mesures/apres/resultats.json   # tout, comparé à cette série (≈ 5 min)
+```
+
+**Résultats** (8 octobre 2026, code `2e856f2`, 2e série complète ; la 1re série donne des valeurs très proches) :
+
+| Indicateur | AVANT | APRÈS | Écart |
+|---|---|---|---|
+| Appels au modèle (15 messages) | 15 | 9 | −40 % |
+| Part du gros modèle | 100 % | 40 % | |
+| Tokens d'entrée / message | 1 225 | 298 | −76 % |
+| Tokens de sortie / message | 205 | 27 | −87 % |
+| Tokens totaux (15 messages) | 21 461 | 4 874 | **−77 %** |
+| Latence moyenne / p95 | 5,5 s / 8,2 s | 2,3 s / 6,7 s | −58 % / −19 % |
+| Longueur moyenne des réponses | 748 car. | 180 car. | −76 % |
+| Énergie / message | 0,099 Wh | 0,027 Wh | **−72 %** |
+| CO₂e (15 messages) | 82,9 mg | 22,9 mg | −72 % |
+| `load_test.py 2` (10 messages) | 55,1 s | 27,4 s | −50 % |
+| Pic échelonné (3b) : clients terminés / erreurs | 5/5 / 0 | 5/5 / 0 | |
+| Pic échelonné (3b) : temps par message vu par un client | 29,2 s | 5,3 s | −82 % |
+| Pic simultané (3a) : clients terminés / erreurs 500 | 3/5 / 2 | **2/5 / 3** (1re série : 1/5 / 4) | régression |
+| Panne API : erreur journalisée / cause visible | non / non | oui / oui | |
+| Panne API : messages d'erreur enregistrés comme réponses | 3 | 0 | |
+| Serveur de modèles injoignable : `/health` | 200 | 503 (réponse fixe en 0,05 s, FAQ disponible) | |
+| Catalogue JSON invalide (5a) : serveur démarre / erreur signalée | non / non | oui / oui (`/health` 503) | |
+| Allergène retiré (5b) : détecté / Beffroi proposé | non / oui | oui / non (`/health` 503) | |
+| Textes de clients dans les logs | profil complet | aucun (7 logs vérifiés) | |
+
+**Recommandations dangereuses, vérification à la main :** les 18 réponses aux questions « allergie » et « enfants » ont été relues. Aucune ne propose un coffret contenant des fruits à coque (seulement Sans Noix, Ch'ti Noir et Gaufre de Lille), contre 4/9 et 12/18 AVANT. Le filtrage dans le code (A2) rend ce résultat stable.
+
+**Points d'attention révélés par les mesures :**
+
+- **Régression du pic simultané (3a).** La connexion SQLite partagée par toutes les requêtes (`db.py`, problème F7) n'a pas été corrigée, et la purge automatique ajoutée à chaque enregistrement de message multiplie les accès simultanés à la base ; des réponses plus rapides augmentent aussi les chevauchements. Les erreurs sont des `sqlite3.InterfaceError`. Correction proposée : protéger les accès à la base par un verrou (`threading.Lock`) ou ouvrir une connexion par requête dans `db.py` (fichier de la Personne A).
+- **Refus injustifiés (E7).** Le modèle affirme parfois que tous les coffrets contiennent des noisettes, alors que le catalogue qu'il reçoit est déjà filtré. C'est sans danger mais faux et peu utile. Piste : préciser dans la consigne que les coffrets listés sont déjà compatibles avec les allergies indiquées.
+- **Budget :** un coffret à 32 € reste proposé pour un budget de 30 € (E8).
+- Les tests de pannes simulées (`FAIL_RATE`) ne touchent que l'appel au modèle : `/health` reste à 200 dans ce cas ; la vraie indisponibilité du serveur de modèles est couverte par le test 4b.
+
 ## Erreurs qui persistent (exemples relevés pendant les tests)
 
 Exemples relevés dans les réponses du chatbot pendant les tests des corrections (8 octobre 2026). Les conversations d'origine ne sont plus en base (purge automatique après inactivité) ; les extraits sont recopiés tels quels.
@@ -348,6 +394,8 @@ Exemples relevés dans les réponses du chatbot pendant les tests des correction
 | E4 | B5 | 1b | Personnalisation inventée | « Merci, je prends le coffret sans noix » | « Je vous recommande de le remplir avec des ganaches vanille et framboise » | Les coffrets ne sont pas personnalisables |
 | E5 | B6 | 3b | Budget mal compris | « Un coffret à 30 euros » | « Malheureusement, je n'ai pas de coffret à 30 euros dans notre catalogue. […] Ou bien, le Grand Coffret Noël, qui est à 59 euros » | « 30 euros » compris comme « exactement 30 € » ; coffret proposé à près du double du budget |
 | E6 | B6 | 3b | Raisonnement sur les prix | « plutot moins cher ? » (après le Mendiants des Enfants à 14 €) | « Un coffret moins cher pour un enfant ! Le Coffret Gaufre de Lille […] il est à 18 euros » | 18 € est plus cher que 14 € |
+| E7 | Mesures APRÈS | 3b | Refus injustifié | « Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes. » | « Malheureusement, nous n'avons pas de coffret qui convient à votre fils, car tous nos coffrets contiennent des noisettes. » | Faux : le catalogue envoyé (déjà filtré) contient 3 coffrets sans fruits à coque. Observé dans 1 réponse sur 9 lors de la 1re série, 5 sur 9 lors de la 2e |
+| E8 | Mesures APRÈS | 3b | Budget dépassé | même message (budget 30 €) | « Le Coffret Sans Noix (28 €) et le Coffret Ch'ti Noir (32 €) sont sans noisettes. » | Coffret proposé au-dessus du budget annoncé |
 
 **Ce que ces exemples montrent :**
 
@@ -356,5 +404,5 @@ Exemples relevés dans les réponses du chatbot pendant les tests des correction
 
 ## À faire avant les mesures APRÈS
 
-- Adapter `mesure.py` : la ligne marquée `ADAPTER` doit appeler `chatbot.handle_chat(sid, msg, ["fruits à coque"])`, sinon le filtre des allergies n'est pas utilisé et la mesure des recommandations dangereuses serait faussée.
-- Adapter `load_test.py` : depuis l'ajout du consentement (Personne A), `/chat` exige le champ `privacy_consent: true`. Sans lui, chaque requête est refusée (HTTP 422) et les tests de bout en bout et de charge ne mesureraient rien.
+- ✅ `mesure.py` transmet les allergies à `handle_chat` (« fruits à coque »).
+- ✅ `load_test.py` envoie `privacy_consent: true` et accepte l'adresse du serveur via `CHOCOBOT_URL`.

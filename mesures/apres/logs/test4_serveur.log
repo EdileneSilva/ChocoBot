@@ -1,0 +1,26 @@
+INFO:     Started server process [1062186]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "http_request", "request_id": "5dd39ada", "method": "GET", "path": "/", "status": 200, "duration_ms": 5}
+INFO:     127.0.0.1:53212 - "GET / HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "chat_message", "request_id": "0075a68b", "session": "test4", "message_length": 32}
+{"ts": "2026-10-08T16:13:55", "level": "WARNING", "event": "llm_call_failed", "request_id": "0075a68b", "model": "llama3.2:3b", "attempt": 1, "error": "RuntimeError", "detail": "Panne simulée : 503 service unavailable", "latency_ms": 0}
+{"ts": "2026-10-08T16:13:55", "level": "ERROR", "event": "llm_call_failed", "request_id": "0075a68b", "model": "llama3.2:1b", "attempt": 2, "error": "RuntimeError", "detail": "Panne simulée : 503 service unavailable", "latency_ms": 0, "exception": "Traceback (most recent call last):\n  File \"/tmp/chocobot-tests-61txugnk/chatbot.py\", line 84, in call_model\n    reply, usage = llm.chat(modele, messages, max_tokens=MAX_TOKENS)\n                   ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/chocobot-tests-61txugnk/llm.py\", line 34, in chat\n    raise RuntimeError(\"Panne simulée : 503 service unavailable\")\nRuntimeError: Panne simulée : 503 service unavailable"}
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "http_request", "request_id": "0075a68b", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 3}
+INFO:     127.0.0.1:53228 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "chat_message", "request_id": "7280a7e0", "session": "test4", "message_length": 22}
+{"ts": "2026-10-08T16:13:55", "level": "WARNING", "event": "llm_call_failed", "request_id": "7280a7e0", "model": "llama3.2:3b", "attempt": 1, "error": "RuntimeError", "detail": "Panne simulée : 503 service unavailable", "latency_ms": 0}
+{"ts": "2026-10-08T16:13:55", "level": "ERROR", "event": "llm_call_failed", "request_id": "7280a7e0", "model": "llama3.2:1b", "attempt": 2, "error": "RuntimeError", "detail": "Panne simulée : 503 service unavailable", "latency_ms": 0, "exception": "Traceback (most recent call last):\n  File \"/tmp/chocobot-tests-61txugnk/chatbot.py\", line 84, in call_model\n    reply, usage = llm.chat(modele, messages, max_tokens=MAX_TOKENS)\n                   ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/chocobot-tests-61txugnk/llm.py\", line 34, in chat\n    raise RuntimeError(\"Panne simulée : 503 service unavailable\")\nRuntimeError: Panne simulée : 503 service unavailable"}
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "http_request", "request_id": "7280a7e0", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 2}
+INFO:     127.0.0.1:53240 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "chat_message", "request_id": "16483d15", "session": "test4", "message_length": 25}
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "faq_hit", "request_id": "16483d15", "faq": "horaires"}
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "http_request", "request_id": "16483d15", "method": "POST", "path": "/chat", "status": 200, "duration_ms": 1}
+INFO:     127.0.0.1:53252 - "POST /chat HTTP/1.1" 200 OK
+{"ts": "2026-10-08T16:13:55", "level": "INFO", "event": "http_request", "request_id": "b10296a6", "method": "GET", "path": "/health", "status": 200, "duration_ms": 26}
+INFO:     127.0.0.1:53262 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1062186]

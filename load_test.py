@@ -1,9 +1,9 @@
 """Envoie une série de messages réalistes à ChocoBot (serveur lancé sur le port 8000).
 Usage : python load_test.py [nombre_de_conversations]   (défaut : 2, soit 10 messages)
 Avec un vrai LLM chaque message prend plusieurs secondes : commencez petit."""
-import json, sys, time, urllib.request
+import json, os, sys, time, urllib.request
 
-BASE = "http://localhost:8000"
+BASE = os.getenv("CHOCOBOT_URL", "http://localhost:8000")   # autre adresse possible (utilisé par tests_auto.py)
 SCENARIO = [
     "Quels sont vos horaires ?",
     "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
