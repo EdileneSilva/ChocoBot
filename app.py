@@ -5,7 +5,7 @@ from typing import Literal
 
 import sentry_sdk
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, Field
 
@@ -15,7 +15,7 @@ import db
 import llm
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
-if SENTRY_DSN:  # sans DSN (ex. sur la machine de la binôme), Sentry reste désactivé
+if SENTRY_DSN:  # sans DSN Sentry reste désactivé
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         environment=os.getenv("SENTRY_ENV", "dev"),
