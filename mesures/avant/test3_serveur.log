@@ -1,0 +1,189 @@
+INFO:     Started server process [699744]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:48170 - "POST /profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48194 - "POST /profile HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/concurrency.py", line 37, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+  File "/home/edilene/Documents/ChocoBot/app.py", line 33, in profile
+    db.save_customer(body.session_id, body.name, body.email, body.allergies, body.children_ages)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/db.py", line 12, in save_customer
+    conn.execute("INSERT OR REPLACE INTO customers VALUES (?,?,?,?,?,?)",
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 (session_id, name, email, allergies, children_ages, time.time()))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.InterfaceError: bad parameter or other API misuse
+INFO:     127.0.0.1:48172 - "POST /profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48206 - "POST /profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48188 - "POST /profile HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:48218 - "POST /chat HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/applications.py", line 112, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 714, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 734, in app
+    await route.handle(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/fastapi/routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/starlette/concurrency.py", line 37, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/.venv/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+  File "/home/edilene/Documents/ChocoBot/app.py", line 39, in chat
+    return handle_chat(body.session_id, body.message)
+  File "/home/edilene/Documents/ChocoBot/chatbot.py", line 39, in handle_chat
+    messages = [{"role": "system", "content": system}] + db.get_history(session_id)
+                                                         ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/home/edilene/Documents/ChocoBot/db.py", line 30, in get_history
+    rows = conn.execute("SELECT role, content FROM messages WHERE session_id=? ORDER BY id", (session_id,)).fetchall()
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.InterfaceError: bad parameter or other API misuse
+INFO:     127.0.0.1:48258 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:48234 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:48248 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.
+INFO:     127.0.0.1:41032 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:41036 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:41044 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Et pour les enfants, vous avez quoi ?
+INFO:     127.0.0.1:35660 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:38020 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:42782 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Quels sont vos horaires ?
+INFO:     127.0.0.1:42792 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:47558 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:55084 - "POST /chat HTTP/1.1" 200 OK
+[chat] {'name': 'Client Test 0', 'email': 'client0@example.com', 'allergies': 'noisettes', 'children_ages': '6, 9'} : Merci, je prends le coffret sans noix !
+INFO:     127.0.0.1:40338 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40350 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52136 - "POST /chat HTTP/1.1" 200 OK

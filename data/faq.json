@@ -1,0 +1,8 @@
+[
+  {"id": "horaires",
+   "mots_cles": ["horaire", "horaires", "ouvert", "ouverte", "ouverture", "fermeture"],
+   "reponse": "Les horaires de nos trois boutiques lilloises sont indiqués sur notre site, rubrique « Boutiques ». Je suis l'assistant virtuel (IA) de la Maison Delcourt : je peux vous aider à choisir un coffret."},
+  {"id": "livraison",
+   "mots_cles": ["livraison", "livrer", "livrez", "expedition", "expedier"],
+   "reponse": "Les délais et frais de livraison sont indiqués sur notre site au moment de la commande. Je peux vous aider à choisir un coffret selon vos goûts, votre budget et vos allergies."}
+]

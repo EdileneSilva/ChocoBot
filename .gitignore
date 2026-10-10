@@ -1,0 +1,5 @@
+chocobot.db
+.env
+/mesures_*.json
+__pycache__/
+.venv

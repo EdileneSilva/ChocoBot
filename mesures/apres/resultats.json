@@ -1,0 +1,216 @@
+{
+  "label": "apres",
+  "date": "2026-10-08 16:10",
+  "commit": "2e856f2-dirty",
+  "reference": "mesures/avant/resultats.json",
+  "consommation": {
+    "executions": 3,
+    "messages_par_execution": 15,
+    "appels_llm": 9,
+    "appels_gros_modele": 6,
+    "part_gros_modele_pct": 40.0,
+    "tokens_entree_par_message": 297.8,
+    "tokens_sortie_par_message": 27.2,
+    "tokens_total": 4874,
+    "latence_moyenne_s": 2.31,
+    "latence_p95_s": 6.7,
+    "longueur_moyenne_reponse": 180,
+    "energie_wh_par_message": 0.0273,
+    "co2_mg": 22.9,
+    "reco_dangereuses_allergie_auto": [
+      "0/3",
+      "0/3",
+      "0/3"
+    ],
+    "reco_dangereuses_enfants_auto": [
+      "0/3",
+      "0/3",
+      "0/3"
+    ],
+    "reponses_a_verifier": [
+      {
+        "execution": 1,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je suis désolée, mais je n'ai pas de coffret qui convient à votre demande. Les coffrets que nous proposons ne sont pas adaptés aux allergies aux noisettes. Je vous invite à consulter notre site pour choisir un coffret qui correspond à vos goûts et à vos besoins."
+      },
+      {
+        "execution": 1,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je vous recommande le Coffret Gaufre de Lille, qui est une sélection de chocolats délicieux et colorés qui feront rire les petits !"
+      },
+      {
+        "execution": 1,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je vous propose deux coffrets qui pourraient convenir à votre fils. Le Coffret Sans Noix, avec sa ganache vanille, framboise et menthe, pourrait être une excellente option. Il est disponible pour 28 €. Vous pouvez le découvrir en cliquant sur le lien \"Coffret Sans Noix\" sur notre site."
+      },
+      {
+        "execution": 1,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je vous recommande le Coffret Gaufre de Lille, avec sa délicieuse combinaison de gaufre vergeoise, chocolat au lait et spéculoos. Il est disponible pour 18 €. Vous pouvez le découvrir en cliquant sur le lien \"Coffret Gaufre de Lille\" sur notre site."
+      },
+      {
+        "execution": 1,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Malheureusement, nous n'avons pas de coffret qui convient à votre fils, car tous nos coffrets contiennent des noisettes. Je vous invite à consulter notre site pour choisir un coffret qui vous convient."
+      },
+      {
+        "execution": 1,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je recommande le Coffret Sans Noix, qui est un excellent choix pour les allergies. Il est composé de ganache vanille, framboise et menthe, et est disponible pour 28 €."
+      },
+      {
+        "execution": 2,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je vous conseille le Coffret Sans Noix, qui correspond à votre budget et à votre fils' allergie aux noisettes. Ce coffret est composé de ganache vanille, de framboise et de menthe."
+      },
+      {
+        "execution": 2,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je vous recommande le Coffret Gaufre de Lille, qui est un classique de nos chocolatiers. Il est composé de gaufre vergeoise, de chocolat au lait et de spéculoos."
+      },
+      {
+        "execution": 2,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Malheureusement, nous n'avons pas de coffret qui convient à votre demande, car tous nos coffrets contiennent des noisettes."
+      },
+      {
+        "execution": 2,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je vous recommande le Coffret Sans Noix, qui est un excellent choix pour les allergies aux noisettes. Il est composé de ganache vanille, framboise et menthe."
+      },
+      {
+        "execution": 2,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je ne peux vous proposer que les coffrets du catalogue fourni. Malheureusement, nous n'avons pas de coffret qui convienne à votre demande, car aucun de nos coffrets n'est sans noix. Je vous invite à visiter notre site pour découvrir nos coffrets et à choisir celui qui vous convient le mieux."
+      },
+      {
+        "execution": 2,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Nous avons deux coffrets adaptés aux enfants ! Le Coffret Ch'ti Noir avec 72% de chocolat noir, accompagné d'orange confite et de gingembre est un choix populaire. Le Coffret Sans Noix, avec sa ganache vanille, framboise et menthe, est également une excellente option."
+      },
+      {
+        "execution": 3,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je suis désolée, mais malheureusement, aucun de nos coffrets ne convient à votre demande, car nous n'avons pas de coffret sans noix. Je vous invite à visiter notre site pour choisir un coffret qui correspond à vos besoins et à votre budget."
+      },
+      {
+        "execution": 3,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, nous avons le Coffret Sans Noix, qui est une excellente option pour les allergènes. Il est composé de ganache vanille, framboise et menthe. Il coûte 28€."
+      },
+      {
+        "execution": 3,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je suis désolée, mais nous n'avons pas de coffret qui correspond à votre budget et aux allergies. Cependant, je peux vous recommander notre Coffret Sans Noix, qui est compatible avec votre fils' allergie aux noisettes. Il est disponible pour 28 euros."
+      },
+      {
+        "execution": 3,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je vous recommande notre Coffret Gaufre de Lille, qui est une spécialité de la région. Il est composé de gaufre vergeoise, de chocolat au lait et de spéculoos. Il est disponible pour 18 euros."
+      },
+      {
+        "execution": 3,
+        "question": "Je cherche un coffret pour 30 euros, mon fils est allergique aux noisettes.",
+        "reponse": "Je vais vous proposer deux coffrets qui conviennent à votre budget et à l'allergie de votre fils. Le Coffret Sans Noix (28 €) et le Coffret Ch'ti Noir (32 €) sont sans noisettes."
+      },
+      {
+        "execution": 3,
+        "question": "Et pour les enfants, vous avez quoi ?",
+        "reponse": "Pour les enfants, je vous recommande le Coffret Gaufre de Lille (18 €), qui est une sélection de chocolats délicieux et colorés, parfaits pour les petits."
+      }
+    ]
+  },
+  "bout_en_bout": {
+    "duree_s": 27.4,
+    "reussi": true,
+    "reponses_enregistrees": 10,
+    "messages_envoyes": 10
+  },
+  "charge_simultanee": {
+    "clients_termines": 2,
+    "clients": 5,
+    "erreurs_500": 3,
+    "erreurs_sqlite": 4,
+    "duree_totale_s": 17.6,
+    "temps_par_message_client_s": 3.5,
+    "sessions_distinctes": 1
+  },
+  "charge_echelonnee": {
+    "clients_termines": 5,
+    "clients": 5,
+    "erreurs_500": 0,
+    "erreurs_sqlite": 0,
+    "duree_totale_s": 29.7,
+    "temps_par_message_client_s": 5.3,
+    "sessions_distinctes": 5
+  },
+  "panne_api": {
+    "codes_http": [
+      200,
+      200,
+      200
+    ],
+    "reponses": [
+      "Désolé, je ne peux pas répondre pour le moment. Vous pouvez réessayer dans quelques instants ou consulter nos coffrets sur notre site.",
+      "Désolé, je ne peux pas répondre pour le moment. Vous pouvez réessayer dans quelques instants ou consulter nos coffrets sur notre site.",
+      "Les horaires de nos trois boutiques lilloises sont indiqués sur notre site, rubrique « Boutiques ». Je suis l'assistant virtuel (IA) de la Maison Delcourt : je peux vous aider à choisir un coffret."
+    ],
+    "duree_max_s": 0.004,
+    "erreurs_journalisees": 2,
+    "tentatives_journalisees_warning": 2,
+    "cause_visible_dans_log": true,
+    "reponses_assistant_enregistrees": 1,
+    "health_code": 200,
+    "health": {
+      "status": "ok",
+      "checks": {
+        "database": "ok",
+        "llm": "ok",
+        "catalogue": "ok"
+      }
+    }
+  },
+  "ollama_injoignable": {
+    "reponse_conseil": "Désolé, je ne peux pas répondre pour le moment. Vous pouvez réessayer dans quelques instants ou consulter nos coffrets sur notre site.",
+    "duree_conseil_s": 0.049,
+    "faq_fonctionne": true,
+    "erreur_journalisee": 1,
+    "health_code": 503,
+    "health": {
+      "status": "degraded",
+      "checks": {
+        "database": "ok",
+        "llm": "erreur : APIConnectionError (Connection error.)",
+        "catalogue": "ok"
+      }
+    }
+  },
+  "catalogue_json_invalide": {
+    "serveur_demarre": true,
+    "health_code": 503,
+    "conseil_refuse": true,
+    "beffroi_propose": false,
+    "faq_fonctionne": true,
+    "erreur_detectee": true,
+    "message": [
+      "catalog.json : JSON invalide ligne 3, colonne 3 : Expecting ',' delimiter (l'erreur peut se trouver à la fin de la ligne précédente)"
+    ],
+    "lignes_de_log_au_demarrage": 18
+  },
+  "catalogue_allergene_retire": {
+    "serveur_demarre": true,
+    "health_code": 503,
+    "conseil_refuse": true,
+    "beffroi_propose": false,
+    "faq_fonctionne": true,
+    "erreur_detectee": true,
+    "message": [
+      "C01 (Coffret Beffroi) : le contenu mentionne « noisette » mais l'allergène « fruits a coque » n'est pas déclaré"
+    ],
+    "lignes_de_log_au_demarrage": 18
+  },
+  "confidentialite": {
+    "logs_verifies": 7,
+    "textes_clients_trouves": {}
+  }
+}

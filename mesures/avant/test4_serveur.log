@@ -1,0 +1,18 @@
+INFO:     Started server process [738345]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:38760 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45846 - "GET /health HTTP/1.1" 200 OK
+[chat] {} : Bonjour
+INFO:     127.0.0.1:45852 - "POST /chat HTTP/1.1" 200 OK
+[chat] {} : Un coffret a 30 euros ?
+INFO:     127.0.0.1:45860 - "POST /chat HTTP/1.1" 200 OK
+[chat] {} : Quels sont vos horaires ?
+INFO:     127.0.0.1:45868 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45880 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35900 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58404 - "GET / HTTP/1.1" 200 OK
+[chat] {} : Je voudrais des chocolats au lait, quels sont vos options ?
+INFO:     127.0.0.1:53744 - "POST /chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52538 - "GET /health HTTP/1.1" 200 OK
